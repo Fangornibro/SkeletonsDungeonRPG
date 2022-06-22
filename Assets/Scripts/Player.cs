@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public GameObject bullet, enemyBullet;
     private float timeBtwShots;
     public float startTimeBtwShots;
-    public static int HP = 100;
+    public static float HP = 100;
     void Start()
     {
         //Set rigidbody

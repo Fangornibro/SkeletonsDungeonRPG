@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Ladder : MonoBehaviour
 {
+    public GameObject floorToShow, floorToHide;
     public bool ifInArea = false;
     private Transform player, tpPoint;
 
@@ -19,6 +20,8 @@ public class Ladder : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 player.position = tpPoint.position;
+                floorToHide.SetActive(false);
+                floorToShow.SetActive(true);
             }
         }
     }

@@ -18,9 +18,9 @@ public class SkeletonKidNPC : MonoBehaviour
     {
         QuestPoint = transform.Find("QuestPoint");
         //First quest
-        takeDialogue1 = new Dialogue(new List<string> { "Skeleton kid", "Player", "Skeleton kid" }, new List<string> { "Hi, i lost my toy. Can you help me?", "Yeah." });
+        takeDialogue1 = new Dialogue(new List<string> { "Skeleton kid", "Player", "Skeleton kid" }, new List<string> { "Hi, i lost my toy. Can you help me?", "Yeah.", "Ty" });
         completeDialogue1 = new Dialogue(new List<string> { "Skeleton kid", "Player" }, new List<string> { "Thanks, now die!", "..." });
-        justDialogue1 = new Dialogue(new List<string> { "Skeleton kid", "Player" }, new List<string> { "Thanks, now die!", "..." });
+        justDialogue1 = new Dialogue(new List<string> { "Skeleton kid" }, new List<string> { "Help!"});
         quest1 = new Quest("Skeleton kid", "Help find my toy", takeDialogue1, completeDialogue1, justDialogue1, 1);
         //List of quests
         AllUncompletedQuests = new List<Quest> { quest1 };

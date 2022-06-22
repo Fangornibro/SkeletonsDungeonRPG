@@ -22,8 +22,8 @@ public class Enemy : MonoBehaviour
         LeftScalexTop = transform.Find("EnemyTop").transform.localScale.x * -1;
         RightScalexBottom = transform.Find("EnemyBottom").transform.localScale.x;
         LeftScalexBottom = transform.Find("EnemyBottom").transform.localScale.x * -1;
-        ShotArea = transform.GetChild(2).GetComponent<CircleCollider2D>();
-        MoveArea = transform.GetChild(3).GetComponent<CircleCollider2D>();
+        ShotArea = transform.Find("ShotArea").GetComponent<CircleCollider2D>();
+        MoveArea = transform.Find("MoveArea").GetComponent<CircleCollider2D>();
         Physics2D.IgnoreCollision(Player, GetComponent<Collider2D>());
         HPBar = transform.Find("EnemyHPBarFront").GetComponent<SpriteRenderer>();
     }
@@ -43,8 +43,8 @@ public class Enemy : MonoBehaviour
             if (animationTime <= 0)
             {
                 IsDamaged = false;
-                transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
-                transform.GetChild(1).GetComponent<SpriteRenderer>().color = Color.white;
+                transform.Find("EnemyTop").GetComponent<SpriteRenderer>().color = Color.white;
+                transform.Find("EnemyBottom").GetComponent<SpriteRenderer>().color = Color.white;
                 animationTime = 0.2f;
             }
         }

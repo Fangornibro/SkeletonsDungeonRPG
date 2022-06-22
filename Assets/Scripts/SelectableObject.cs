@@ -24,7 +24,7 @@ public class SelectableObject : MonoBehaviour
             {
                 SkeletonKidNPC.SkeletonKid.ifInArea = false;
             }
-            if (lastSelectedItem.name == "DoubleLadder")
+            if (lastSelectedItem.name == "DoubleLadderFloor1" || lastSelectedItem.name == "DoubleLadderFloor2" || lastSelectedItem.name == "DoubleLadderFloor3" || lastSelectedItem.name == "DoubleLadderFloor4" || lastSelectedItem.name == "DoubleLadderFloor5" || lastSelectedItem.name == "DoubleLadderFloor6")
             {
                 lastSelectedItem.GetComponentInParent<Ladder>().ifInArea = false;
             }
@@ -57,7 +57,7 @@ public class SelectableObject : MonoBehaviour
             {
                 SkeletonKidNPC.SkeletonKid.ifInArea = true;
             }
-            if (selectedItem.name == "DoubleLadder")
+            if (selectedItem.name == "DoubleLadderFloor1" || selectedItem.name == "DoubleLadderFloor2" || selectedItem.name == "DoubleLadderFloor3" || selectedItem.name == "DoubleLadderFloor4" || selectedItem.name == "DoubleLadderFloor5" || selectedItem.name == "DoubleLadderFloor6")
             {
                 selectedItem.GetComponentInParent<Ladder>().ifInArea = true;
             }

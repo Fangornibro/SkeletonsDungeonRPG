@@ -9,6 +9,7 @@ public class NPC
     public TextMeshProUGUI text, person;
     public List<Quest> allUncompletedQuests;
     public bool ifInArea = false;
+    public static bool isDialogueOpen = false;
     public NPC(Transform QuestPoint, TextMeshProUGUI Text, TextMeshProUGUI Person, List<Quest> AllUncompletedQuests)
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -44,14 +45,16 @@ public class NPC
                         text.SetText("");
                         person.SetText("");
                         curQuest.statement = 2;
-                        Time.timeScale = 1;
+                        isDialogueOpen = false;
+                        Pause.pauseOn = false;
                     }
                     else
                     {
                         person.SetText(curQuest.takeDialogue.curPerson());
                         text.SetText(curQuest.takeDialogue.curText());
                         curQuest.takeDialogue.NextPhrase();
-                        Time.timeScale = 0;
+                        isDialogueOpen = true;
+                        Pause.pauseOn = true;
                     }
                 }
             }
@@ -68,14 +71,16 @@ public class NPC
                         text.SetText("");
                         person.SetText("");
                         curQuest.justDialogue.curID = 0;
-                        Time.timeScale = 1;
+                        isDialogueOpen = false;
+                        Pause.pauseOn = false;
                     }
                     else
                     {
                         person.SetText(curQuest.justDialogue.curPerson());
                         text.SetText(curQuest.justDialogue.curText());
                         curQuest.justDialogue.NextPhrase();
-                        Time.timeScale = 0;
+                        isDialogueOpen = true;
+                        Pause.pauseOn = true;
                     }
                 }
             }
@@ -98,14 +103,16 @@ public class NPC
                         text.SetText("");
                         person.SetText("");
                         allUncompletedQuests.RemoveAt(0);
-                        Time.timeScale = 1;
+                        isDialogueOpen = false;
+                        Pause.pauseOn = false;
                     }
                     else
                     {
                         person.SetText(curQuest.completeDialogue.curPerson());
                         text.SetText(curQuest.completeDialogue.curText());
                         curQuest.completeDialogue.NextPhrase();
-                        Time.timeScale = 0;
+                        isDialogueOpen = true;
+                        Pause.pauseOn = true;
                     }
                 }
             }

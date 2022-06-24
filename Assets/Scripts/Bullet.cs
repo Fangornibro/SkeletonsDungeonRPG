@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
     public float speed, lifetime, distance;
     public int damage;
     public LayerMask whatIsSolid;
-
+    public ParticleSystem particleSystem;
     void Update()
     {
         //Ability to hit solid objects
@@ -18,6 +18,8 @@ public class Bullet : MonoBehaviour
             {
                 hitinfo.collider.GetComponent<Enemy>().TakeDamage(damage);
             }
+            Instantiate(particleSystem, transform.position, Quaternion.Euler(0, 0, 0));
+            particleSystem.Play();
             Destroy(gameObject);
         }
         //Bullet movement
@@ -26,6 +28,8 @@ public class Bullet : MonoBehaviour
         lifetime -= Time.deltaTime;
         if (lifetime <= 0)
         {
+            Instantiate(particleSystem, transform.position, Quaternion.Euler(0, 0, 0));
+            particleSystem.Play();
             Destroy(gameObject);
         }
     }

@@ -5,10 +5,11 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public List<GameObject> InventoryUI = new List<GameObject>();
+    public Transform menu;
     [HideInInspector]
     public Cell cell11, cell12, cell13, cell21, cell22, cell23;
     public static List<Cell> cells;
-    private bool isInventOpen = false;
+    public bool isInventOpen = false;
     void Start()
     {
         cell11 = new Cell(-100, 60, null);
@@ -22,9 +23,15 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I) && !menu.GetComponent<Menu>().isMenuOpen && !NPC.isDialogueOpen)
         {
             isInventOpen = !isInventOpen;
+            Pause.pauseOn = !Pause.pauseOn;
+        }
+        if (isInventOpen && Input.GetKeyDown(KeyCode.Escape))
+        {
+            isInventOpen = !isInventOpen;
+            Pause.pauseOn = !Pause.pauseOn;
         }
         if (isInventOpen)
         {
@@ -50,4 +57,3 @@ public class Inventory : MonoBehaviour
         }
     }
 }
-    

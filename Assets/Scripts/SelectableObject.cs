@@ -10,63 +10,81 @@ public class SelectableObject : MonoBehaviour
     public LayerMask selectedItemLayerMask;
     private Collider2D selectedItem, lastSelectedItem;
     public Material selectedMaterial, defaultMaterial;
+    public Transform invent, menu;
 
     void Update()
     {
-        if (lastSelectedItem != null)
+        if (!menu.GetComponent<Menu>().isMenuOpen && !invent.GetComponent<Inventory>().isInventOpen)
         {
-            lastSelectedItem.GetComponentInParent<SpriteRenderer>().material = defaultMaterial;
-            if (lastSelectedItem.name == "GateSelectionArea")
+            if (lastSelectedItem != null)
+            {
+                lastSelectedItem.GetComponentInParent<SpriteRenderer>().material = defaultMaterial;
+                if (lastSelectedItem.GetComponentInParent<Gate>() != null)
+                {
+                    lastSelectedItem.GetComponentInParent<Gate>().ifInArea = false;
+                }
+                if (lastSelectedItem.GetComponentInParent<SkeletonKidNPC>() != null)
+                {
+                    SkeletonKidNPC.SkeletonKid.ifInArea = false;
+                }
+                if (lastSelectedItem.GetComponentInParent<Ladder>() != null)
+                {
+                    lastSelectedItem.GetComponentInParent<Ladder>().ifInArea = false;
+                }
+            }
+            allSelectableItems = Physics2D.OverlapCircleAll(transform.position, selectRange, selectedItemLayerMask);
+
+
+            foreach (Collider2D item in allSelectableItems)
+            {
+                if (selectedItem == null)
+                {
+                    selectedItem = item;
+                    lastSelectedItem = item;
+                }
+                if (item.Distance(transform.GetComponent<Collider2D>()).distance < selectedItem.Distance(transform.GetComponent<Collider2D>()).distance)
+                {
+
+                    selectedItem = item;
+                    lastSelectedItem = item;
+                }
+            }
+            if (selectedItem != null)
+            {
+                selectedItem.GetComponentInParent<SpriteRenderer>().material = selectedMaterial;
+                if (selectedItem.GetComponentInParent<Gate>() != null)
+                {
+                    selectedItem.GetComponentInParent<Gate>().ifInArea = true;
+                }
+                if (selectedItem.GetComponentInParent<SkeletonKidNPC>() != null)
+                {
+                    SkeletonKidNPC.SkeletonKid.ifInArea = true;
+                }
+                if (selectedItem.GetComponentInParent<Ladder>() != null)
+                {
+                    selectedItem.GetComponentInParent<Ladder>().ifInArea = true;
+                }
+                if (selectedItem.GetComponentInParent<Item>() != null)
+                {
+                    selectedItem.GetComponentInParent<Item>().take();
+                }
+            }
+            selectedItem = null;
+        }
+        else
+        {
+            if (lastSelectedItem.GetComponentInParent<Gate>() != null)
             {
                 lastSelectedItem.GetComponentInParent<Gate>().ifInArea = false;
             }
-            if (lastSelectedItem.name == "SkeletonKidNPCSelectionArea")
+            if (lastSelectedItem.GetComponentInParent<SkeletonKidNPC>() != null)
             {
                 SkeletonKidNPC.SkeletonKid.ifInArea = false;
             }
-            if (lastSelectedItem.name == "DoubleLadderFloor1" || lastSelectedItem.name == "DoubleLadderFloor2" || lastSelectedItem.name == "DoubleLadderFloor3" || lastSelectedItem.name == "DoubleLadderFloor4" || lastSelectedItem.name == "DoubleLadderFloor5" || lastSelectedItem.name == "DoubleLadderFloor6")
+            if (lastSelectedItem.GetComponentInParent<Ladder>() != null)
             {
                 lastSelectedItem.GetComponentInParent<Ladder>().ifInArea = false;
             }
         }
-        allSelectableItems = Physics2D.OverlapCircleAll(transform.position, selectRange, selectedItemLayerMask);
-
-
-        foreach (Collider2D item in allSelectableItems)
-        {
-            if (selectedItem == null)
-            {
-                selectedItem = item;
-                lastSelectedItem = item;
-            }
-            if (item.Distance(transform.GetComponent<Collider2D>()).distance < selectedItem.Distance(transform.GetComponent<Collider2D>()).distance)
-            {
-
-                selectedItem = item;
-                lastSelectedItem = item;
-            }
-        }
-        if (selectedItem != null)
-        {
-            selectedItem.GetComponentInParent<SpriteRenderer>().material = selectedMaterial;
-            if (selectedItem.name == "GateSelectionArea")
-            {
-                selectedItem.GetComponentInParent<Gate>().ifInArea = true;
-            }
-            if (selectedItem.name == "SkeletonKidNPCSelectionArea")
-            {
-                SkeletonKidNPC.SkeletonKid.ifInArea = true;
-            }
-            if (selectedItem.name == "DoubleLadderFloor1" || selectedItem.name == "DoubleLadderFloor2" || selectedItem.name == "DoubleLadderFloor3" || selectedItem.name == "DoubleLadderFloor4" || selectedItem.name == "DoubleLadderFloor5" || selectedItem.name == "DoubleLadderFloor6")
-            {
-                selectedItem.GetComponentInParent<Ladder>().ifInArea = true;
-            }
-            if (selectedItem.name == "Key")
-            {
-                selectedItem.GetComponentInParent<Item>().take();
-            }
-        }
-        selectedItem = null;
-
     }
 }

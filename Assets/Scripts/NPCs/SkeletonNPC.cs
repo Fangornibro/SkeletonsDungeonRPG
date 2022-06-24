@@ -13,6 +13,7 @@ public class SkeletonNPC : MonoBehaviour
     public static NPC Skeleton;
     private bool QuestExist = true;
     public Collider2D player;
+    public Transform invent, menu;
 
     List<Quest> AllUncompletedQuests;
     private void Start()
@@ -31,9 +32,16 @@ public class SkeletonNPC : MonoBehaviour
     }
     void Update()
     {
-        if (QuestArea.GetComponent<Collider2D>().Distance(player).distance <= 0)
+        if (!menu.GetComponent<Menu>().isMenuOpen && !invent.GetComponent<Inventory>().isInventOpen)
         {
-            Skeleton.ifInArea = true;
+            if (QuestArea.GetComponent<Collider2D>().Distance(player).distance <= 0)
+            {
+                Skeleton.ifInArea = true;
+            }
+            else
+            {
+                Skeleton.ifInArea = false;
+            }
         }
         else
         {

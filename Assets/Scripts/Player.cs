@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     private float timeBtwShots;
     public float startTimeBtwShots;
     public static float HP = 100;
+    public static bool pauseOn = false;
     void Start()
     {
         //Set rigidbody
@@ -33,48 +34,50 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        //Move velocity calculation
-        moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
-        moveVelocity = moveInput * speed;
-        //Running animation
-        if (moveInput != Vector2.zero)
+        if (!Pause.pauseOn)
         {
-            animatorLegs.SetBool("IsRunning", true);
+            //Move velocity calculation
+            moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+            moveVelocity = moveInput * speed;
+            //Running animation
+            if (moveInput != Vector2.zero)
+            {
+                animatorLegs.SetBool("IsRunning", true);
+            }
+            else
+            {
+                animatorLegs.SetBool("IsRunning", false);
+            }
+            //Player's body & legs turn (right or left)
+            if (moveInput.x > 0)
+            {
+                transform.Find("PlayerBody").localScale = new Vector2(RightScalexBody, transform.Find("PlayerBody").localScale.y);
+                transform.Find("PlayerLegs").localScale = new Vector2(RightScalexLegs, transform.Find("PlayerLegs").localScale.y);
+            }
+            else if (moveInput.x < 0)
+            {
+                transform.Find("PlayerBody").localScale = new Vector2(LeftScalexBody, transform.Find("PlayerBody").localScale.y);
+                transform.Find("PlayerLegs").localScale = new Vector2(LeftScalexLegs, transform.Find("PlayerLegs").localScale.y);
+            }
+            //Player's head turn (right or left)
+            if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x)
+            {
+                transform.Find("PlayerHead").localScale = new Vector2(RightScalexHead, transform.Find("PlayerHead").localScale.y);
+            }
+            else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x < transform.position.x)
+            {
+                transform.Find("PlayerHead").localScale = new Vector2(LeftScalexHead, transform.Find("PlayerHead").localScale.y);
+            }
+            //Player's head turn (top or bottom)
+            if (Camera.main.ScreenToWorldPoint(Input.mousePosition).y > transform.position.y)
+            {
+                animatorHead.SetBool("IsTop", true);
+            }
+            else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).y < transform.position.y)
+            {
+                animatorHead.SetBool("IsTop", false);
+            }
         }
-        else
-        {
-            animatorLegs.SetBool("IsRunning", false);
-        }
-        //Player's body & legs turn (right or left)
-        if (moveInput.x > 0)
-        {
-            transform.Find("PlayerBody").localScale = new Vector2(RightScalexBody, transform.Find("PlayerBody").localScale.y);
-            transform.Find("PlayerLegs").localScale = new Vector2(RightScalexLegs, transform.Find("PlayerLegs").localScale.y);
-        }
-        else if (moveInput.x < 0)
-        {
-            transform.Find("PlayerBody").localScale = new Vector2(LeftScalexBody, transform.Find("PlayerBody").localScale.y);
-            transform.Find("PlayerLegs").localScale = new Vector2(LeftScalexLegs, transform.Find("PlayerLegs").localScale.y);
-        }
-        //Player's head turn (right or left)
-        if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x)
-        {
-            transform.Find("PlayerHead").localScale = new Vector2(RightScalexHead, transform.Find("PlayerHead").localScale.y);
-        }
-        else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x < transform.position.x)
-        {
-            transform.Find("PlayerHead").localScale = new Vector2(LeftScalexHead, transform.Find("PlayerHead").localScale.y);
-        }
-        //Player's head turn (top or bottom)
-        if (Camera.main.ScreenToWorldPoint(Input.mousePosition).y > transform.position.y)
-        {
-            animatorHead.SetBool("IsTop", true);
-        }
-        else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).y < transform.position.y)
-        {
-            animatorHead.SetBool("IsTop", false);
-        }
-
         //Shot angle
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         float rot = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
@@ -82,7 +85,7 @@ public class Player : MonoBehaviour
         if (timeBtwShots <= 0)
         {
             animatorBody.SetBool("IsAttacking", false);
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) && !Pause.pauseOn)
             {
                 Instantiate(bullet, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0f,0f,rot - 90));
                 timeBtwShots = startTimeBtwShots;

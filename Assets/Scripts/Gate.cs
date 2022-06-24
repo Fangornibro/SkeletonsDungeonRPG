@@ -12,6 +12,7 @@ public class Gate : MonoBehaviour
     private Dialogue GateIsClosed;
     public TextMeshProUGUI text;
     public bool ifInArea = false;
+    public bool ifEnemyInArea = false;
     private void Start()
     {
         doorColider = GetComponent<Collider2D>();
@@ -22,6 +23,7 @@ public class Gate : MonoBehaviour
     {
         if (isLocked)
         {
+            gameObject.layer = LayerMask.NameToLayer("Solid");
             doorColider.isTrigger = false;
             animator.SetBool("IsLocked", true);
             if (ifInArea)
@@ -34,15 +36,24 @@ public class Gate : MonoBehaviour
                     }
                 }
             }
+            if (!quest)
+            {
+                if (ifEnemyInArea)
+                {
+                    isLocked = false;
+                }
+            }
         }
         else
         {
+            gameObject.layer = LayerMask.NameToLayer("Default");
             doorColider.isTrigger = true;
             animator.SetBool("IsLocked", false);
             if (ifInArea)
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    ifEnemyInArea = false;
                     isLocked = true;
                 }
             }

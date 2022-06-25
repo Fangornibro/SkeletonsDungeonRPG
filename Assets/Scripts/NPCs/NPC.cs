@@ -10,6 +10,11 @@ public class NPC
     public List<Quest> allUncompletedQuests;
     public bool ifInArea = false;
     public static bool isDialogueOpen = false;
+    int i =0;
+    bool epressed = false, stringEnded = false;
+    string Text = "";
+    float delayBetweenLetters = 0.1f, startdelayBetweenLetters = 0.1f;
+    public AudioSource textSound = GameObject.Find("textSound").GetComponent<AudioSource>();
     public NPC(Transform QuestPoint, TextMeshProUGUI Text, TextMeshProUGUI Person, List<Quest> AllUncompletedQuests)
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -40,21 +45,67 @@ public class NPC
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    if (stringEnded)
+                    {
+                        curQuest.takeDialogue.NextPhrase();
+                        text.SetText("");
+                        person.SetText("");
+                        Text = "";
+                        i = 0;
+                        stringEnded = false;
+                    }
+                    else
+                    {
+                        if (epressed)
+                        {
+                            startdelayBetweenLetters = 0;
+                        }
+                    }
+                    epressed = true;
+                }
+                if (epressed)
+                {
+                    isDialogueOpen = true;
+                    Pause.pauseOn = true;
                     if (curQuest.takeDialogue.dialogueEnded())
                     {
                         text.SetText("");
                         person.SetText("");
-                        curQuest.statement = 2;
+                        Text = "";
+                        i = 0;
+                        stringEnded = false;
+                        epressed = false;
                         isDialogueOpen = false;
                         Pause.pauseOn = false;
+                        curQuest.statement = 2;
                     }
                     else
                     {
                         person.SetText(curQuest.takeDialogue.curPerson());
-                        text.SetText(curQuest.takeDialogue.curText());
-                        curQuest.takeDialogue.NextPhrase();
-                        isDialogueOpen = true;
-                        Pause.pauseOn = true;
+                        if (i < curQuest.takeDialogue.curText().Count)
+                        {
+                            if (delayBetweenLetters <= 0)
+                            {
+                                Text += curQuest.takeDialogue.curText()[i];
+                                if (curQuest.takeDialogue.curText()[i] != " ")
+                                {
+                                    textSound.Play();
+                                }
+                                delayBetweenLetters = startdelayBetweenLetters;
+                                i++;
+                            }
+                            else
+                            {
+                                delayBetweenLetters -= Time.deltaTime;
+                            }
+                        }
+                        else
+                        {
+                            startdelayBetweenLetters = 0.1f;
+                            epressed = false;
+                            stringEnded = true;
+                        }
+                        text.SetText(Text);
                     }
                 }
             }
@@ -66,10 +117,36 @@ public class NPC
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    if (stringEnded)
+                    {
+                        curQuest.justDialogue.NextPhrase();
+                        text.SetText("");
+                        person.SetText("");
+                        Text = "";
+                        i = 0;
+                        stringEnded = false;
+                    }
+                    else
+                    {
+                        if (epressed)
+                        {
+                            startdelayBetweenLetters = 0;
+                        }
+                    }
+                    epressed = true;
+                }
+                if (epressed)
+                {
+                    isDialogueOpen = true;
+                    Pause.pauseOn = true;
                     if (curQuest.justDialogue.dialogueEnded())
                     {
                         text.SetText("");
                         person.SetText("");
+                        Text = "";
+                        i = 0;
+                        stringEnded = false;
+                        epressed = false;
                         curQuest.justDialogue.curID = 0;
                         isDialogueOpen = false;
                         Pause.pauseOn = false;
@@ -77,10 +154,30 @@ public class NPC
                     else
                     {
                         person.SetText(curQuest.justDialogue.curPerson());
-                        text.SetText(curQuest.justDialogue.curText());
-                        curQuest.justDialogue.NextPhrase();
-                        isDialogueOpen = true;
-                        Pause.pauseOn = true;
+                        if (i < curQuest.justDialogue.curText().Count)
+                        {
+                            if (delayBetweenLetters <= 0)
+                            {
+                                Text += curQuest.justDialogue.curText()[i];
+                                if (curQuest.justDialogue.curText()[i] != " ")
+                                {
+                                    textSound.Play();
+                                }
+                                delayBetweenLetters = startdelayBetweenLetters;
+                                i++;
+                            }
+                            else
+                            {
+                                delayBetweenLetters -= Time.deltaTime;
+                            }
+                        }
+                        else
+                        {
+                            startdelayBetweenLetters = 0.1f;
+                            epressed = false;
+                            stringEnded = true;
+                        }
+                        text.SetText(Text);
                     }
                 }
             }
@@ -98,10 +195,36 @@ public class NPC
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    if (stringEnded)
+                    {
+                        curQuest.completeDialogue.NextPhrase();
+                        text.SetText("");
+                        person.SetText("");
+                        Text = "";
+                        i = 0;
+                        stringEnded = false;
+                    }
+                    else
+                    {
+                        if (epressed)
+                        {
+                            startdelayBetweenLetters = 0;
+                        }
+                    }
+                    epressed = true;
+                }
+                if (epressed)
+                {
+                    isDialogueOpen = true;
+                    Pause.pauseOn = true;
                     if (curQuest.completeDialogue.dialogueEnded())
                     {
                         text.SetText("");
                         person.SetText("");
+                        Text = "";
+                        i = 0;
+                        stringEnded = false;
+                        epressed = false;
                         allUncompletedQuests.RemoveAt(0);
                         isDialogueOpen = false;
                         Pause.pauseOn = false;
@@ -109,10 +232,30 @@ public class NPC
                     else
                     {
                         person.SetText(curQuest.completeDialogue.curPerson());
-                        text.SetText(curQuest.completeDialogue.curText());
-                        curQuest.completeDialogue.NextPhrase();
-                        isDialogueOpen = true;
-                        Pause.pauseOn = true;
+                        if (i < curQuest.completeDialogue.curText().Count)
+                        {
+                            if (delayBetweenLetters <= 0)
+                            {
+                                Text += curQuest.completeDialogue.curText()[i];
+                                if (curQuest.completeDialogue.curText()[i] != " ")
+                                {
+                                    textSound.Play();
+                                }
+                                delayBetweenLetters = startdelayBetweenLetters;
+                                i++;
+                            }
+                            else
+                            {
+                                delayBetweenLetters -= Time.deltaTime;
+                            }
+                        }
+                        else
+                        {
+                            startdelayBetweenLetters = 0.1f;
+                            epressed = false;
+                            stringEnded = true;
+                        }
+                        text.SetText(Text);
                     }
                 }
             }

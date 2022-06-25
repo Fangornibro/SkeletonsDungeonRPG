@@ -14,8 +14,18 @@ public class Player : MonoBehaviour
     public float startTimeBtwShots;
     public static float HP = 100;
     public static bool pauseOn = false;
+
+
+    bool IsDamaged = false;
+    float timeBetweenDamage = 0.5f;
+    SpriteRenderer spriteRendererHead;
+    SpriteRenderer spriteRendererBody;
+    SpriteRenderer spriteRendererLegs;
     void Start()
     {
+        spriteRendererHead = transform.Find("PlayerHead").GetComponent<SpriteRenderer>();
+        spriteRendererBody = transform.Find("PlayerBody").GetComponent<SpriteRenderer>();
+        spriteRendererLegs = transform.Find("PlayerLegs").GetComponent<SpriteRenderer>();
         //Set rigidbody
         rb = GetComponent<Rigidbody2D>();
         //Body right turn
@@ -77,37 +87,70 @@ public class Player : MonoBehaviour
             {
                 animatorHead.SetBool("IsTop", false);
             }
-        }
-        //Shot angle
-        Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float rot = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-        //Attacking
-        if (timeBtwShots <= 0)
-        {
-            animatorBody.SetBool("IsAttacking", false);
-            if (Input.GetMouseButton(0) && !Pause.pauseOn)
+            //Shot angle
+            Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            float rot = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+            //Attacking
+            if (timeBtwShots <= 0)
             {
-                Instantiate(bullet, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0f,0f,rot - 90));
-                timeBtwShots = startTimeBtwShots;
+                animatorBody.SetBool("IsAttacking", false);
+                if (Input.GetMouseButton(0) && !Pause.pauseOn)
+                {
+                    Instantiate(bullet, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0f, 0f, rot - 90));
+                    timeBtwShots = startTimeBtwShots;
+                }
+            }
+            else
+            {
+                animatorBody.SetBool("IsAttacking", true);
+                timeBtwShots -= Time.deltaTime;
+            }
+
+
+            //Player death
+            if (HP <= 0)
+            {
+                Destroy(gameObject);
+            }
+
+
+            if (IsDamaged)
+            {
+                timeBetweenDamage -= Time.deltaTime;
+                if (timeBetweenDamage <= 0)
+                {
+                    IsDamaged = false;
+                    spriteRendererHead.color = Color.white;
+                    spriteRendererBody.color = Color.white;
+                    spriteRendererLegs.color = Color.white;
+                    timeBetweenDamage = 0.5f;
+                }
             }
         }
         else
         {
-            animatorBody.SetBool("IsAttacking", true);
-            timeBtwShots -= Time.deltaTime;
-        }
-
-
-        //Player death
-        if (HP <= 0)
-        {
-            Destroy(gameObject);
+            animatorLegs.SetBool("IsRunning", false);
         }
     }
 
     private void FixedUpdate()
     {
-        //Player movement
-        rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
+        if (!Pause.pauseOn)
+        {
+            //Player movement
+            rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
+        }
+    }
+
+    public void takeDamage(int damage)
+    {
+        if (!IsDamaged)
+        {
+            IsDamaged = true;
+            HP -= damage;
+            spriteRendererHead.color = new Color(1, 1, 1, 0.5f);
+            spriteRendererBody.color = new Color(1, 1, 1, 0.5f);
+            spriteRendererLegs.color = new Color(1, 1, 1, 0.5f);
+        }
     }
 }

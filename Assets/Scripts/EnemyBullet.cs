@@ -22,42 +22,45 @@ public class EnemyBullet : MonoBehaviour
     }
     void FixedUpdate()
     {
-        //Remove the homing if the bullet flies close to the Player
-        if (PlayerHomingArea.Distance(EnemyBulletCollider).distance <= 0)
+        if (!Pause.pauseOn)
         {
-            isHoming = false;
-        }
-        //Set the bullet homing on Player
-        if (isHoming)
-        {
-            Vector3 difference = target.transform.position - transform.position;
-            float rot = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, 0f, rot - 90);
-        }
+            //Remove the homing if the bullet flies close to the Player
+            if (PlayerHomingArea.Distance(EnemyBulletCollider).distance <= 0)
+            {
+                isHoming = false;
+            }
+            //Set the bullet homing on Player
+            if (isHoming)
+            {
+                Vector3 difference = target.transform.position - transform.position;
+                float rot = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.Euler(0f, 0f, rot - 90);
+            }
 
-        //Ability to hit the player
-        RaycastHit2D hitinfo1 = Physics2D.Raycast(transform.position, transform.up, distance, playerMask);
-        if (hitinfo1.collider != null)
-        {
-            Player.HP -= 10;
-            Destroy(gameObject);
-        }
+            //Ability to hit the player
+            RaycastHit2D hitinfo1 = Physics2D.Raycast(transform.position, transform.up, distance, playerMask);
+            if (hitinfo1.collider != null)
+            {
+                target.GetComponent<Player>().takeDamage(10);
+                Destroy(gameObject);
+            }
 
-        //Ability to hit Walls
-        RaycastHit2D hitinfo2 = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
-        if (hitinfo2.collider != null)
-        {
-            Destroy(gameObject);
-        }
+            //Ability to hit Walls
+            RaycastHit2D hitinfo2 = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
+            if (hitinfo2.collider != null)
+            {
+                Destroy(gameObject);
+            }
 
-        //Bullet movement
-        transform.Translate(Vector2.up * speed * Time.deltaTime);
+            //Bullet movement
+            transform.Translate(Vector2.up * speed * Time.deltaTime);
 
-        //Set lifetime
-        lifetime -= Time.deltaTime;
-        if (lifetime <= 0)
-        {
-            Destroy(gameObject);
+            //Set lifetime
+            lifetime -= Time.deltaTime;
+            if (lifetime <= 0)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

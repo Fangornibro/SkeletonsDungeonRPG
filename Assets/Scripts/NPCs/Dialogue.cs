@@ -23,13 +23,18 @@ public class Dialogue
         return Text.Count == curID;
     }
 
+    public List<string> curText()
+    {
+        List<string> Textletters = new List<string>();
+        foreach (char s in Text[curID])
+        {
+            Textletters.Add(s.ToString());
+        }
+        return Textletters;
+    }
+
     public string curPerson()
     {
         return Person[curID];
-    }
-
-    public string curText()
-    {
-        return Text[curID];
     }
 }

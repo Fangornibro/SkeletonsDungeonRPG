@@ -8,7 +8,7 @@ public class SelectableObject : MonoBehaviour
     public Collider2D[] allSelectableItems;
     public static float selectRange;
     public LayerMask selectedItemLayerMask;
-    private Collider2D selectedItem, lastSelectedItem;
+    public static Collider2D selectedItem, lastSelectedItem;
     public Material selectedMaterial, defaultMaterial;
     public Transform invent, menu;
 
@@ -73,17 +73,20 @@ public class SelectableObject : MonoBehaviour
         }
         else
         {
-            if (lastSelectedItem.GetComponentInParent<Gate>() != null)
+            if (lastSelectedItem != null)
             {
-                lastSelectedItem.GetComponentInParent<Gate>().ifInArea = false;
-            }
-            if (lastSelectedItem.GetComponentInParent<SkeletonKidNPC>() != null)
-            {
-                SkeletonKidNPC.SkeletonKid.ifInArea = false;
-            }
-            if (lastSelectedItem.GetComponentInParent<Ladder>() != null)
-            {
-                lastSelectedItem.GetComponentInParent<Ladder>().ifInArea = false;
+                if (lastSelectedItem.GetComponentInParent<Gate>() != null)
+                {
+                    lastSelectedItem.GetComponentInParent<Gate>().ifInArea = false;
+                }
+                if (lastSelectedItem.GetComponentInParent<SkeletonKidNPC>() != null)
+                {
+                    SkeletonKidNPC.SkeletonKid.ifInArea = false;
+                }
+                if (lastSelectedItem.GetComponentInParent<Ladder>() != null)
+                {
+                    lastSelectedItem.GetComponentInParent<Ladder>().ifInArea = false;
+                }
             }
         }
     }

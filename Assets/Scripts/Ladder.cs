@@ -6,7 +6,8 @@ public class Ladder : MonoBehaviour
 {
     public GameObject floorToShow, floorToHide;
     public bool ifInArea = false;
-    private Transform player, tpPoint;
+    private Transform player;
+    public Transform tpPoint;
 
     private void Start()
     {

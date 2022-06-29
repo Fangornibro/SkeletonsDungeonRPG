@@ -9,9 +9,11 @@ public class Inventory : MonoBehaviour
     [HideInInspector]
     public Cell cell11, cell12, cell13, cell21, cell22, cell23;
     public static List<Cell> cells;
+    [HideInInspector]
     public bool isInventOpen = false;
     void Start()
     {
+        //Empty cells creation
         cell11 = new Cell(-100, 60, null);
         cell12 = new Cell(0, 60, null);
         cell13 = new Cell(100, 60, null);
@@ -23,16 +25,13 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I) && !menu.GetComponent<Menu>().isMenuOpen && !NPC.isDialogueOpen)
+        //Inventory open/close
+        if (Input.GetKeyDown(KeyCode.I) && !menu.GetComponent<Menu>().isMenuOpen && !NPC.isDialogueOpen || isInventOpen && Input.GetKeyDown(KeyCode.Escape))
         {
             isInventOpen = !isInventOpen;
             Pause.pauseOn = !Pause.pauseOn;
         }
-        if (isInventOpen && Input.GetKeyDown(KeyCode.Escape))
-        {
-            isInventOpen = !isInventOpen;
-            Pause.pauseOn = !Pause.pauseOn;
-        }
+        //Activation/deactivation of UI when inventory opened
         if (isInventOpen)
         {
             foreach (GameObject UI in InventoryUI)
@@ -47,7 +46,7 @@ public class Inventory : MonoBehaviour
                 UI.SetActive(false);
             }
         }
-
+        //Item location
         foreach (Cell cell in cells)
         {
             if (cell.item != null)

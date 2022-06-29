@@ -395,6 +395,7 @@
 "Assets/Scripts/Ladder.cs"
 "Assets/Scripts/Menu.cs"
 "Assets/Scripts/NPCs/Dialogue.cs"
+"Assets/Scripts/NPCs/DialogueBranch.cs"
 "Assets/Scripts/NPCs/NPC.cs"
 "Assets/Scripts/NPCs/Quest.cs"
 "Assets/Scripts/NPCs/SkeletonKidNPC.cs"

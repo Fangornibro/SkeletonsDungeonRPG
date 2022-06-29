@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     private Vector2 moveInput, moveVelocity;
     public Animator animatorBody, animatorHead, animatorLegs;
     float RightScalexBody, LeftScalexBody, RightScalexHead, LeftScalexHead, RightScalexLegs, LeftScalexLegs;
-    public GameObject bullet, enemyBullet;
+    public GameObject bullet;
     private float timeBtwShots;
     public float startTimeBtwShots;
     public static float HP = 100;
@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
                 Destroy(gameObject);
             }
 
-
+            //Player invincible 
             if (IsDamaged)
             {
                 timeBetweenDamage -= Time.deltaTime;

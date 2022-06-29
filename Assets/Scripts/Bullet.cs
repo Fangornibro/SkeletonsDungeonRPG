@@ -20,6 +20,7 @@ public class Bullet : MonoBehaviour
                 {
                     hitinfo.collider.GetComponent<Enemy>().TakeDamage(damage);
                 }
+                //Particles
                 Instantiate(particleSystem, transform.position, Quaternion.Euler(0, 0, 0));
                 particleSystem.Play();
                 Destroy(gameObject);

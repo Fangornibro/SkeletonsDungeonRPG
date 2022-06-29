@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Trap : MonoBehaviour
 {
-    GameObject player;
-    BoxCollider2D damageCollider;
-    CircleCollider2D trigerCollider;
-    Animator animator;
-    float timeBtwDamage = 0f;
-    bool isOn = false;
+    private GameObject player;
+    private BoxCollider2D damageCollider;
+    private CircleCollider2D trigerCollider;
+    private Animator animator;
+    private float timeBtwDamage = 0f;
+    private bool isOn = false;
     void Start()
     {
         trigerCollider = GetComponent<CircleCollider2D>();

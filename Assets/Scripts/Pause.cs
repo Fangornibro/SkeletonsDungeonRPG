@@ -5,8 +5,4 @@ using UnityEngine;
 public class Pause : MonoBehaviour
 {
     public static bool pauseOn;
-    void Update()
-    {
-
-    }
 }

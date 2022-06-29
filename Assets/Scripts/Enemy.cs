@@ -7,35 +7,37 @@ public class Enemy : MonoBehaviour
 {
     public float health;
     public Animator animatorTop, animatorBottom;
-    bool IsDamaged;
-    float animationTime = 0.2f;
-    public Collider2D Player;
-    private Collider2D ShotArea, MoveArea;
-    private float timeBtwShots;
     public float startTimeBtwShots, speed;
     public GameObject bullet;
-    float RightScalexTop, LeftScalexTop, RightScalexBottom, LeftScalexBottom;
-    private SpriteRenderer HPBar;
-    private NavMeshAgent navMeshAgent;
-    Vector2 curTarget;
-
-    public Collider2D[] allSelectableItems;
-    public LayerMask selectedItemLayerMask;
-
+    public Transform shotPoint;
     public enum EnemyClass { Melee, Range }
-
     public EnemyClass enemyClass;
+
+
+    private float timeBtwShots;
+    private bool isDamaged;
+    private float animationTime = 0.2f;
+    private Collider2D player, shotArea, moveArea;
+    private float rightScalexTop, leftScalexTop, rightScalexBottom, leftScalexBottom;
+    private SpriteRenderer hpBar;
+    private NavMeshAgent navMeshAgent;
+    private Vector2 curTarget;
+    [HideInInspector]
+    public Collider2D[] allSelectableItems;
+    [HideInInspector]
+    public LayerMask selectedItemLayerMask;
 
     private void Start()
     {
-        RightScalexTop = transform.Find("EnemyTop").transform.localScale.x;
-        LeftScalexTop = transform.Find("EnemyTop").transform.localScale.x * -1;
-        RightScalexBottom = transform.Find("EnemyBottom").transform.localScale.x;
-        LeftScalexBottom = transform.Find("EnemyBottom").transform.localScale.x * -1;
-        ShotArea = transform.Find("ShotArea").GetComponent<Collider2D>();
-        MoveArea = transform.Find("MoveArea").GetComponent<Collider2D>();
-        Physics2D.IgnoreCollision(Player, GetComponent<Collider2D>());
-        HPBar = transform.Find("EnemyHPBarFront").GetComponent<SpriteRenderer>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Collider2D>();
+        rightScalexTop = transform.Find("EnemyTop").transform.localScale.x;
+        leftScalexTop = transform.Find("EnemyTop").transform.localScale.x * -1;
+        rightScalexBottom = transform.Find("EnemyBottom").transform.localScale.x;
+        leftScalexBottom = transform.Find("EnemyBottom").transform.localScale.x * -1;
+        shotArea = transform.Find("ShotArea").GetComponent<Collider2D>();
+        moveArea = transform.Find("MoveArea").GetComponent<Collider2D>();
+        Physics2D.IgnoreCollision(player, GetComponent<Collider2D>());
+        hpBar = transform.Find("EnemyHPBarFront").GetComponent<SpriteRenderer>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         curTarget = transform.position;
 
@@ -46,30 +48,30 @@ public class Enemy : MonoBehaviour
     {
         if (!Pause.pauseOn)
         {
-            HPBar.size = new Vector2(health / 100f * 1.312f, 0.125f);
+            hpBar.size = new Vector2(health / 100f * 1.312f, 0.125f);
             //Enemy death
             if (health == 0)
             {
                 Destroy(gameObject);
             }
             //Enemy damaged
-            if (IsDamaged)
+            if (isDamaged)
             {
-                if (Player.transform.position.x > transform.position.x)
+                if (player.transform.position.x > transform.position.x)
                 {
-                    transform.Find("EnemyTop").transform.localScale = new Vector2(RightScalexTop, transform.Find("EnemyTop").transform.localScale.y);
-                    transform.Find("EnemyBottom").transform.localScale = new Vector2(RightScalexBottom, transform.Find("EnemyTop").transform.localScale.y);
+                    transform.Find("EnemyTop").transform.localScale = new Vector2(rightScalexTop, transform.Find("EnemyTop").transform.localScale.y);
+                    transform.Find("EnemyBottom").transform.localScale = new Vector2(rightScalexBottom, transform.Find("EnemyTop").transform.localScale.y);
                 }
                 else
                 {
-                    transform.Find("EnemyTop").transform.localScale = new Vector2(LeftScalexTop, transform.Find("EnemyTop").transform.localScale.y);
-                    transform.Find("EnemyBottom").transform.localScale = new Vector2(LeftScalexBottom, transform.Find("EnemyTop").transform.localScale.y);
+                    transform.Find("EnemyTop").transform.localScale = new Vector2(leftScalexTop, transform.Find("EnemyTop").transform.localScale.y);
+                    transform.Find("EnemyBottom").transform.localScale = new Vector2(leftScalexBottom, transform.Find("EnemyTop").transform.localScale.y);
                 }
-                curTarget = Player.transform.position;
+                curTarget = player.transform.position;
                 animationTime -= Time.deltaTime;
                 if (animationTime <= 0)
                 {
-                    IsDamaged = false;
+                    isDamaged = false;
                     transform.Find("EnemyTop").GetComponent<SpriteRenderer>().color = Color.white;
                     transform.Find("EnemyBottom").GetComponent<SpriteRenderer>().color = Color.white;
                     animationTime = 0.2f;
@@ -77,9 +79,9 @@ public class Enemy : MonoBehaviour
             }
 
             //Enemy attack
-            if (Player.Distance(ShotArea).distance <= 0)
+            if (player.Distance(shotArea).distance <= 0)
             {
-                Vector3 difference = Player.transform.position - transform.position;
+                Vector3 difference = player.transform.position - transform.position;
                 float rot = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
                 if (timeBtwShots <= 0)
                 {
@@ -113,7 +115,7 @@ public class Enemy : MonoBehaviour
     
     public void TakeDamage(int damage)
     {
-        IsDamaged = true;
+        isDamaged = true;
         health -= damage;
         transform.Find("EnemyTop").GetComponent<SpriteRenderer>().color = new Color(1, 0.5f, 0.5f, 1);
         transform.Find("EnemyBottom").GetComponent<SpriteRenderer>().color = new Color(1, 0.5f, 0.5f, 1);
@@ -123,27 +125,28 @@ public class Enemy : MonoBehaviour
     {
         if (!Pause.pauseOn)
         {
-                    navMeshAgent.SetDestination(curTarget);
-            if (MoveArea.Distance(Player).distance <= 0)
+            //Enemy rotation(left right side)
+            navMeshAgent.SetDestination(curTarget);
+            if (moveArea.Distance(player).distance <= 0)
             {
-                if (Player.transform.position.x > transform.position.x)
+                if (player.transform.position.x > transform.position.x)
                 {
-                    transform.Find("EnemyTop").transform.localScale = new Vector2(RightScalexTop, transform.Find("EnemyTop").transform.localScale.y);
-                    transform.Find("EnemyBottom").transform.localScale = new Vector2(RightScalexBottom, transform.Find("EnemyTop").transform.localScale.y);
+                    transform.Find("EnemyTop").transform.localScale = new Vector2(rightScalexTop, transform.Find("EnemyTop").transform.localScale.y);
+                    transform.Find("EnemyBottom").transform.localScale = new Vector2(rightScalexBottom, transform.Find("EnemyTop").transform.localScale.y);
                 }
                 else
                 {
-                    transform.Find("EnemyTop").transform.localScale = new Vector2(LeftScalexTop, transform.Find("EnemyTop").transform.localScale.y);
-                    transform.Find("EnemyBottom").transform.localScale = new Vector2(LeftScalexBottom, transform.Find("EnemyTop").transform.localScale.y);
+                    transform.Find("EnemyTop").transform.localScale = new Vector2(leftScalexTop, transform.Find("EnemyTop").transform.localScale.y);
+                    transform.Find("EnemyBottom").transform.localScale = new Vector2(leftScalexBottom, transform.Find("EnemyTop").transform.localScale.y);
                 }
             }
 
-
+            //Melee enemy movement
             if (enemyClass == EnemyClass.Melee)
             {
-                if (MoveArea.Distance(Player).distance <= 0)
+                if (moveArea.Distance(player).distance <= 0)
                 {
-                    curTarget = Player.transform.position;
+                    curTarget = player.transform.position;
                     animatorBottom.SetBool("IsRunning", true);
                     animatorTop.SetBool("IsRunning", true);
                 }
@@ -152,13 +155,14 @@ public class Enemy : MonoBehaviour
                     animatorBottom.SetBool("IsRunning", false);
                 }
             }
+            //Range enemy movement
             else if (enemyClass == EnemyClass.Range)
             {
-                if (MoveArea.Distance(Player).distance <= 0)
+                if (moveArea.Distance(player).distance <= 0)
                 {
-                    if (ShotArea.Distance(Player).distance >= -2)
+                    if (shotArea.Distance(player).distance >= -2)
                     {
-                        curTarget = Player.transform.position;
+                        curTarget = player.transform.position;
                         animatorBottom.SetBool("IsRunning", true);
                         animatorTop.SetBool("IsRunning", true);
                     }

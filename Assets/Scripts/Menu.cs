@@ -5,6 +5,7 @@ using UnityEngine;
 public class Menu : MonoBehaviour
 {
     public Transform invent;
+    [HideInInspector]
     public bool isMenuOpen = false;
     void Update()
     {

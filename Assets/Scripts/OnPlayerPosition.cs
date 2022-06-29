@@ -10,7 +10,7 @@ public class OnPlayerPosition : MonoBehaviour
 
     void Update()
     {
-
+        //Camera shaking
         if (Player.HP <= 30)
         {
             if (timeBtwShaking <= 0)

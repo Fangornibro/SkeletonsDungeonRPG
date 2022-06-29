@@ -5,22 +5,26 @@ using TMPro;
 
 public class Gate : MonoBehaviour
 {
-    public bool isLocked;
-    public bool quest;
+    public enum Quest { none, Skeleton }
+    public Quest quest;
+
+
     private Collider2D doorColider;
     private Animator animator;
-    private Dialogue GateIsClosed;
-    public TextMeshProUGUI text;
+    [HideInInspector]
+    public bool isLocked;
+    [HideInInspector]
     public bool ifInArea = false;
+    [HideInInspector]
     public bool ifEnemyInArea = false;
     private void Start()
     {
         doorColider = GetComponent<Collider2D>();
         animator = GetComponent<Animator>();
-        GateIsClosed = new Dialogue(new List<string> { "" }, new List<string> { "The gates are closed." });
     }
     void Update()
     {
+        //Gate opening
         if (isLocked)
         {
             gameObject.layer = LayerMask.NameToLayer("Solid");
@@ -30,13 +34,13 @@ public class Gate : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (!quest)
+                    if (quest == Quest.none)
                     {
                         isLocked = false;
                     }
                 }
             }
-            if (!quest)
+            if (quest == Quest.none)
             {
                 if (ifEnemyInArea)
                 {
@@ -44,6 +48,7 @@ public class Gate : MonoBehaviour
                 }
             }
         }
+        //Gate closing
         else
         {
             gameObject.layer = LayerMask.NameToLayer("Default");

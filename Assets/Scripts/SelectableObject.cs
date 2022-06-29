@@ -5,6 +5,7 @@ using UnityEngine;
 public class SelectableObject : MonoBehaviour
 
 {
+    [HideInInspector]
     public Collider2D[] allSelectableItems;
     public static float selectRange;
     public LayerMask selectedItemLayerMask;

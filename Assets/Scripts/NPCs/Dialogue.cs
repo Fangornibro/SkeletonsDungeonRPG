@@ -6,12 +6,13 @@ public class Dialogue
 {
     public List<string> Person;
     public List<string> Text;
-    public int FullList, curID = 0;
-    public Dialogue(List<string> person, List<string> text)
+    public List<List<string>> Button;
+    public int curID = 0;
+    public Dialogue(List<string> person, List<string> text, List<List<string>> button)
     {
         Person = person;
         Text = text;
-        FullList = Text.Count;
+        Button = button;
     }
 
     public void NextPhrase()

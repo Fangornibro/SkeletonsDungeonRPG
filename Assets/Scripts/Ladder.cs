@@ -5,9 +5,10 @@ using UnityEngine;
 public class Ladder : MonoBehaviour
 {
     public GameObject floorToShow, floorToHide;
+    [HideInInspector]
     public bool ifInArea = false;
     private Transform player;
-    public Transform tpPoint;
+    private Transform tpPoint;
 
     private void Start()
     {

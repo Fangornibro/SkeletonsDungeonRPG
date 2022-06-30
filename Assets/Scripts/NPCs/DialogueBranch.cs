@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DialogueBranch
 {
-    public string text;
+    public string text, person;
 
     public string choice1text;
     public string choice2text;
@@ -14,9 +14,11 @@ public class DialogueBranch
     public DialogueBranch choice2dialoguebranch;
     public DialogueBranch choice3dialoguebranch;
     public DialogueBranch choice4dialoguebranch;
+    public int nextStatement;
 
-    public DialogueBranch(string Text, string Choice1text, string Choice2text, string Choice3text, string Choice4text, DialogueBranch Choice1dialoguebranch, DialogueBranch Choice2dialoguebranch, DialogueBranch Choice3dialoguebranch, DialogueBranch Choice4dialoguebranch)
+    public DialogueBranch(string Person, string Text, string Choice1text, string Choice2text, string Choice3text, string Choice4text, DialogueBranch Choice1dialoguebranch, DialogueBranch Choice2dialoguebranch, DialogueBranch Choice3dialoguebranch, DialogueBranch Choice4dialoguebranch, int NextStatement)
     {
+        person = Person;
         text = Text;
         choice1text = Choice1text;  
         choice2text = Choice2text;
@@ -26,5 +28,16 @@ public class DialogueBranch
         choice2dialoguebranch = Choice2dialoguebranch;
         choice3dialoguebranch = Choice3dialoguebranch;
         choice4dialoguebranch = Choice4dialoguebranch;
+        nextStatement = NextStatement;
+    }
+
+    public List<string> textToChars()
+    {
+        List<string> Textletters = new List<string>();
+        foreach (char s in text)
+        {
+            Textletters.Add(s.ToString());
+        }
+        return Textletters;
     }
 }

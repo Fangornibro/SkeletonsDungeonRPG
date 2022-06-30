@@ -23,6 +23,10 @@ public class SelectableObject : MonoBehaviour
                 if (lastSelectedItem.GetComponentInParent<Gate>() != null)
                 {
                     lastSelectedItem.GetComponentInParent<Gate>().ifInArea = false;
+                    if (lastSelectedItem.GetComponentInParent<Gate>().quest == Gate.Quest.Skeleton)
+                    {
+                        SkeletonNPC.Skeleton.ifInArea = false;
+                    }
                 }
                 if (lastSelectedItem.GetComponentInParent<SkeletonKidNPC>() != null)
                 {
@@ -56,6 +60,10 @@ public class SelectableObject : MonoBehaviour
                 if (selectedItem.GetComponentInParent<Gate>() != null)
                 {
                     selectedItem.GetComponentInParent<Gate>().ifInArea = true;
+                    if (selectedItem.GetComponentInParent<Gate>().quest == Gate.Quest.Skeleton)
+                    {
+                        SkeletonNPC.Skeleton.ifInArea = true;
+                    }
                 }
                 if (selectedItem.GetComponentInParent<SkeletonKidNPC>() != null)
                 {
@@ -79,6 +87,10 @@ public class SelectableObject : MonoBehaviour
                 if (lastSelectedItem.GetComponentInParent<Gate>() != null)
                 {
                     lastSelectedItem.GetComponentInParent<Gate>().ifInArea = false;
+                    if (lastSelectedItem.GetComponentInParent<Gate>().quest == Gate.Quest.Skeleton)
+                    {
+                        SkeletonNPC.Skeleton.ifInArea = false;
+                    }
                 }
                 if (lastSelectedItem.GetComponentInParent<SkeletonKidNPC>() != null)
                 {

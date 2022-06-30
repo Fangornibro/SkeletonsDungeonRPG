@@ -12,11 +12,13 @@ public class NPC
     public List<Quest> allUncompletedQuests;
     public bool ifInArea = false;
     public static bool isDialogueOpen = false;
-    int i =0;
-    bool epressed = false, stringEnded = false;
+    int ichar = 0;
+    bool epressed = false, stringEnded = false, initialization = true;
     string Text = "";
     float delayBetweenLetters = 0.1f, startdelayBetweenLetters = 0.1f;
     public AudioSource textSound = GameObject.Find("textSound").GetComponent<AudioSource>();
+    public DialogueBranch curDialogueBranch;
+    public int plusStatement = 0;
     public NPC(Transform QuestPoint, TextMeshProUGUI Text, TextMeshProUGUI Person, GameObject Button1, GameObject Button2, GameObject Button3, GameObject Button4, List<Quest> AllUncompletedQuests)
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -27,7 +29,7 @@ public class NPC
         button1 = Button1;
         button2 = Button2;
         button3 = Button3;
-        button4 = Button1;
+        button4 = Button4;
     }
 
     public bool NPCQuest()
@@ -41,293 +43,151 @@ public class NPC
             questPoint.GetComponent<Animator>().SetInteger("Statement", 4);
             return false;
         }
-       
 
-        if (curQuest.statement == 1)
+        questPoint.GetComponent<Animator>().SetInteger("Statement", curQuest.statement);
+
+        if (initialization)
         {
-            questPoint.GetComponent<Animator>().SetInteger("Statement", 1);
-
-            if (ifInArea)
-            {
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    if(!stringEnded)
-                    {
-                        if (epressed)
-                        {
-                            startdelayBetweenLetters = 0;
-                        }
-                    }
-                    epressed = true;
-                }
-                if (Input.GetKeyDown(KeyCode.Mouse0))
-                {
-                    if (!stringEnded)
-                    {
-                        if (epressed)
-                        {
-                            startdelayBetweenLetters = 0;
-                        }
-                    }
-                }
-                if (stringEnded)
-                {
-                    
-                    if (curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][0] != null)
-                    {
-                        button1.SetActive(true);
-                        button1.GetComponentInChildren<TextMeshProUGUI>().text = curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][0];
-                        button1.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][0], curQuest.takeDialogue); });
-                    }
-                    if (curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][1] != null)
-                    {
-                        button2.SetActive(true);
-                        button2.GetComponentInChildren<TextMeshProUGUI>().text = curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][1];
-                        button2.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][1], curQuest.takeDialogue); });
-                    }
-                    if (curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][2] != null)
-                    {
-                        button3.SetActive(true);
-                        button3.GetComponentInChildren<TextMeshProUGUI>().text = curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][2];
-                        button3.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][2], curQuest.takeDialogue); });
-                    }
-                    if (curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][3] != null)
-                    {
-                        button4.SetActive(true);
-                        button4.GetComponentInChildren<TextMeshProUGUI>().text = curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][3];
-                        button4.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curQuest.takeDialogue.Button[curQuest.takeDialogue.curID][3], curQuest.takeDialogue); });
-                    }
-                }
-                if (epressed)
-                {
-                    isDialogueOpen = true;
-                    Pause.pauseOn = true;
-                    if (curQuest.takeDialogue.dialogueEnded())
-                    {
-                        button1.GetComponent<Button>().onClick.RemoveAllListeners();
-                        button2.GetComponent<Button>().onClick.RemoveAllListeners();
-                        button3.GetComponent<Button>().onClick.RemoveAllListeners();
-                        button4.GetComponent<Button>().onClick.RemoveAllListeners();
-                        text.SetText("");
-                        person.SetText("");
-                        Text = "";
-                        i = 0;
-                        stringEnded = false;
-                        epressed = false;
-                        isDialogueOpen = false;
-                        Pause.pauseOn = false;
-                        curQuest.statement = 2;
-                    }
-                    else
-                    {
-                        person.SetText(curQuest.takeDialogue.curPerson());
-                        if (i < curQuest.takeDialogue.curText().Count)
-                        {
-                            if (delayBetweenLetters <= 0)
-                            {
-                                Text += curQuest.takeDialogue.curText()[i];
-                                if (curQuest.takeDialogue.curText()[i] != " ")
-                                {
-                                    textSound.Play();
-                                }
-                                delayBetweenLetters = startdelayBetweenLetters;
-                                i++;
-                            }
-                            else
-                            {
-                                delayBetweenLetters -= Time.deltaTime;
-                            }
-                        }
-                        else
-                        {
-                            startdelayBetweenLetters = 0.1f;
-                            epressed = false;
-                            stringEnded = true;
-                        }
-                        text.SetText(Text);
-                    }
-                }
-            }
+            curDialogueBranch = curQuest.dialogues[curQuest.statement - 1];
+            initialization = false;
         }
-        else if (curQuest.statement == 2)
+
+        if (ifInArea)
         {
-            questPoint.GetComponent<Animator>().SetInteger("Statement", 2);
-            if (ifInArea)
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                if (Input.GetKeyDown(KeyCode.E))
+                if (!stringEnded)
                 {
-                    if (stringEnded)
+                    if (epressed)
                     {
-                        curQuest.justDialogue.NextPhrase();
-                        text.SetText("");
-                        person.SetText("");
-                        Text = "";
-                        i = 0;
-                        stringEnded = false;
+                        startdelayBetweenLetters = 0;
                     }
-                    else
-                    {
-                        if (epressed)
-                        {
-                            startdelayBetweenLetters = 0;
-                        }
-                    }
-                    epressed = true;
                 }
-                if (epressed)
+                epressed = true;
+            }
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                if (!stringEnded)
                 {
-                    isDialogueOpen = true;
-                    Pause.pauseOn = true;
-                    if (curQuest.justDialogue.dialogueEnded())
+                    if (epressed)
                     {
-                        text.SetText("");
-                        person.SetText("");
-                        Text = "";
-                        i = 0;
-                        stringEnded = false;
-                        epressed = false;
-                        curQuest.justDialogue.curID = 0;
-                        isDialogueOpen = false;
-                        Pause.pauseOn = false;
-                    }
-                    else
-                    {
-                        person.SetText(curQuest.justDialogue.curPerson());
-                        if (i < curQuest.justDialogue.curText().Count)
-                        {
-                            if (delayBetweenLetters <= 0)
-                            {
-                                Text += curQuest.justDialogue.curText()[i];
-                                if (curQuest.justDialogue.curText()[i] != " ")
-                                {
-                                    textSound.Play();
-                                }
-                                delayBetweenLetters = startdelayBetweenLetters;
-                                i++;
-                            }
-                            else
-                            {
-                                delayBetweenLetters -= Time.deltaTime;
-                            }
-                        }
-                        else
-                        {
-                            startdelayBetweenLetters = 0.1f;
-                            epressed = false;
-                            stringEnded = true;
-                        }
-                        text.SetText(Text);
+                        startdelayBetweenLetters = 0;
                     }
                 }
             }
-
-            if (curQuest.emptyCounter == curQuest.counter)
+            if (stringEnded)
             {
-                curQuest.statement = 3;
-            }
-        }
-        else if (curQuest.statement == 3)
-        {
-            questPoint.GetComponent<Animator>().SetInteger("Statement", 3);
 
-            if (ifInArea)
-            {
-                if (Input.GetKeyDown(KeyCode.E))
+                if (curDialogueBranch.choice1text != null)
                 {
-                    if (stringEnded)
-                    {
-                        curQuest.completeDialogue.NextPhrase();
-                        text.SetText("");
-                        person.SetText("");
-                        Text = "";
-                        i = 0;
-                        stringEnded = false;
-                    }
-                    else
-                    {
-                        if (epressed)
-                        {
-                            startdelayBetweenLetters = 0;
-                        }
-                    }
-                    epressed = true;
+                    button1.SetActive(true);
+                    button1.GetComponentInChildren<TextMeshProUGUI>().text = curDialogueBranch.choice1text;
+                    button1.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curDialogueBranch.choice1dialoguebranch); });
                 }
-                if (epressed)
+                if (curDialogueBranch.choice2text != null)
                 {
-                    isDialogueOpen = true;
-                    Pause.pauseOn = true;
-                    if (curQuest.completeDialogue.dialogueEnded())
+                    button2.SetActive(true);
+                    button2.GetComponentInChildren<TextMeshProUGUI>().text = curDialogueBranch.choice2text;
+                    button2.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curDialogueBranch.choice2dialoguebranch); });
+                }
+                if (curDialogueBranch.choice3text != null)
+                {
+                    button3.SetActive(true);
+                    button3.GetComponentInChildren<TextMeshProUGUI>().text = curDialogueBranch.choice3text;
+                    button3.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curDialogueBranch.choice3dialoguebranch); });
+                }
+                if (curDialogueBranch.choice4text != null)
+                {
+                    button4.SetActive(true);
+                    button4.GetComponentInChildren<TextMeshProUGUI>().text = curDialogueBranch.choice4text;
+                    button4.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curDialogueBranch.choice4dialoguebranch); });
+                }
+            }
+            if (epressed)
+            {
+                isDialogueOpen = true;
+                Pause.pauseOn = true;
+                if (curDialogueBranch == null)
+                {
+                    button1.GetComponent<Button>().onClick.RemoveAllListeners();
+                    button2.GetComponent<Button>().onClick.RemoveAllListeners();
+                    button3.GetComponent<Button>().onClick.RemoveAllListeners();
+                    button4.GetComponent<Button>().onClick.RemoveAllListeners();
+                    text.SetText("");
+                    person.SetText("");
+                    Text = "";
+                    ichar = 0;
+                    stringEnded = false;
+                    epressed = false;
+                    isDialogueOpen = false;
+                    Pause.pauseOn = false;
+                    initialization = true;
+                    if (curQuest.statement == 3)
                     {
-                        text.SetText("");
-                        person.SetText("");
-                        Text = "";
-                        i = 0;
-                        stringEnded = false;
-                        epressed = false;
                         allUncompletedQuests.RemoveAt(0);
-                        isDialogueOpen = false;
-                        Pause.pauseOn = false;
                     }
                     else
                     {
-                        person.SetText(curQuest.completeDialogue.curPerson());
-                        if (i < curQuest.completeDialogue.curText().Count)
+                        curQuest.statement += plusStatement;
+                    }
+                }
+                else
+                {
+                    person.SetText(curDialogueBranch.person);
+                    if (ichar < curDialogueBranch.textToChars().Count)
+                    {
+                        if (delayBetweenLetters <= 0)
                         {
-                            if (delayBetweenLetters <= 0)
+                            Text += curDialogueBranch.textToChars()[ichar];
+                            if (curDialogueBranch.textToChars()[ichar] != " ")
                             {
-                                Text += curQuest.completeDialogue.curText()[i];
-                                if (curQuest.completeDialogue.curText()[i] != " ")
-                                {
-                                    textSound.Play();
-                                }
-                                delayBetweenLetters = startdelayBetweenLetters;
-                                i++;
+                                textSound.Play();
                             }
-                            else
-                            {
-                                delayBetweenLetters -= Time.deltaTime;
-                            }
+                            delayBetweenLetters = startdelayBetweenLetters;
+                            ichar++;
                         }
                         else
                         {
-                            startdelayBetweenLetters = 0.1f;
-                            epressed = false;
-                            stringEnded = true;
+                            delayBetweenLetters -= Time.deltaTime;
                         }
-                        text.SetText(Text);
                     }
+                    else
+                    {
+                        startdelayBetweenLetters = 0.1f;
+                        epressed = false;
+                        stringEnded = true;
+                    }
+                    text.SetText(Text);
                 }
             }
         }
         return true;
     }
-    public void DialogueSelection(string textFromButton, Dialogue curDialogue)
+    public void DialogueSelection(DialogueBranch nextDialogueBranch)
     {
         if (stringEnded)
         {
-            if (curDialogue.Button[curQuest.takeDialogue.curID][0] != null)
+            button1.SetActive(false);
+            button2.SetActive(false);
+            button3.SetActive(false);
+            button4.SetActive(false);
+            if (nextDialogueBranch == null)
             {
-                button1.SetActive(false);
+                plusStatement = curDialogueBranch.nextStatement;
             }
-            if (curDialogue.Button[curQuest.takeDialogue.curID][1] != null)
-            {
-                button2.SetActive(false);
-            }
-            if (curDialogue.Button[curQuest.takeDialogue.curID][2] != null)
-            {
-                button3.SetActive(false);
-            }
-            if (curDialogue.Button[curQuest.takeDialogue.curID][3] != null)
-            {
-                button4.SetActive(false);
-            }
-            curDialogue.NextPhrase();
+            curDialogueBranch = nextDialogueBranch;
             text.SetText("");
             person.SetText("");
             Text = "";
-            i = 0;
+            ichar = 0;
             stringEnded = false;
             epressed = true;
         }
+    }
+
+    public void SetStatement(int Statemnet)
+    {
+        curQuest.statement = Statemnet;
+        initialization = true;
     }
 }

@@ -5,15 +5,12 @@ using UnityEngine;
 public class Quest
 {
     public string questGiver, name;
-    public int statement = 1, counter, emptyCounter = 0;
-    public Dialogue takeDialogue, completeDialogue, justDialogue;
-    public Quest(string QuestGiver, string Name, Dialogue TakeDialogue, Dialogue CompleteDialogue, Dialogue JustDialogue, int Counter)
+    public int statement = 1;
+    public List<DialogueBranch> dialogues;
+    public Quest(string QuestGiver, string Name, DialogueBranch TakeDialogue, DialogueBranch JustDialogue, DialogueBranch CompleteDialogue)
     {
         questGiver = QuestGiver;
         name = Name;
-        takeDialogue = TakeDialogue;
-        completeDialogue = CompleteDialogue;
-        counter = Counter;
-        justDialogue = JustDialogue;
+        dialogues = new List<DialogueBranch> { TakeDialogue, JustDialogue, CompleteDialogue };
     }
 }

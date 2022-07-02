@@ -56,16 +56,16 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshModifierVolumeEditor.cs" />
+    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshSurfaceEditor2d.cs" />
+    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshModifierEditor.cs" />
+    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshComponentsGUIUtility.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshAssetManager2d.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshCacheSources2dEditor.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshSurfaceEditor.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshCollectSources2dEditor.cs" />
-    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshModifierVolumeEditor.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshAssetManager.cs" />
-    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshSurfaceEditor2d.cs" />
-    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshModifierEditor.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshCollectRootSources2dEditor.cs" />
-    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshComponentsGUIUtility.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Editor\NavMeshLinkEditor.cs" />
   </ItemGroup>
   <ItemGroup>

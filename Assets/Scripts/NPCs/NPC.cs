@@ -1,35 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
+using TMPro;
 public class NPC
 {
-    public Transform player, questPoint;
+    public Transform questPoint;
     public Quest curQuest;
-    public TextMeshProUGUI text, person;
-    public GameObject button1, button2, button3, button4;
+    public TextMeshProUGUI text = GameObject.Find("Text").GetComponent<TextMeshProUGUI>(), person = GameObject.Find("Person").GetComponent<TextMeshProUGUI>();
+    public GameObject faceIcon = GameObject.Find("DialogueHudFaceIcon"), button1 = GameObject.Find("DialogueButton1"), button2 = GameObject.Find("DialogueButton2"), button3 = GameObject.Find("DialogueButton3"), button4 = GameObject.Find("DialogueButton4");
     public List<Quest> allUncompletedQuests;
     public bool ifInArea = false;
     public static bool isDialogueOpen = false;
     int ichar = 0;
-    bool epressed = false, stringEnded = false, initialization = true;
+    public bool epressed = false, stringEnded = false, initialization = true;
     string Text = "";
     float delayBetweenLetters = 0.1f, startdelayBetweenLetters = 0.1f;
     public AudioSource textSound = GameObject.Find("textSound").GetComponent<AudioSource>();
     public DialogueBranch curDialogueBranch;
     public int plusStatement = 0;
-    public NPC(Transform QuestPoint, TextMeshProUGUI Text, TextMeshProUGUI Person, GameObject Button1, GameObject Button2, GameObject Button3, GameObject Button4, List<Quest> AllUncompletedQuests)
+    public NPC(Transform QuestPoint, List<Quest> AllUncompletedQuests)
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
         questPoint = QuestPoint;     
-        text = Text;
-        person = Person;
         allUncompletedQuests = AllUncompletedQuests;
-        button1 = Button1;
-        button2 = Button2;
-        button3 = Button3;
-        button4 = Button4;
     }
 
     public bool NPCQuest()
@@ -48,6 +41,10 @@ public class NPC
 
         if (initialization)
         {
+            button1.SetActive(false);
+            button2.SetActive(false);
+            button3.SetActive(false);
+            button4.SetActive(false);
             curDialogueBranch = curQuest.dialogues[curQuest.statement - 1];
             initialization = false;
         }
@@ -77,30 +74,26 @@ public class NPC
             }
             if (stringEnded)
             {
-
+                DialogueButton.curNPC = this;
                 if (curDialogueBranch.choice1text != null)
                 {
                     button1.SetActive(true);
                     button1.GetComponentInChildren<TextMeshProUGUI>().text = curDialogueBranch.choice1text;
-                    button1.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curDialogueBranch.choice1dialoguebranch); });
                 }
                 if (curDialogueBranch.choice2text != null)
                 {
                     button2.SetActive(true);
                     button2.GetComponentInChildren<TextMeshProUGUI>().text = curDialogueBranch.choice2text;
-                    button2.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curDialogueBranch.choice2dialoguebranch); });
                 }
                 if (curDialogueBranch.choice3text != null)
                 {
                     button3.SetActive(true);
                     button3.GetComponentInChildren<TextMeshProUGUI>().text = curDialogueBranch.choice3text;
-                    button3.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curDialogueBranch.choice3dialoguebranch); });
                 }
                 if (curDialogueBranch.choice4text != null)
                 {
                     button4.SetActive(true);
                     button4.GetComponentInChildren<TextMeshProUGUI>().text = curDialogueBranch.choice4text;
-                    button4.GetComponent<Button>().onClick.AddListener(delegate { DialogueSelection(curDialogueBranch.choice4dialoguebranch); });
                 }
             }
             if (epressed)
@@ -109,10 +102,6 @@ public class NPC
                 Pause.pauseOn = true;
                 if (curDialogueBranch == null)
                 {
-                    button1.GetComponent<Button>().onClick.RemoveAllListeners();
-                    button2.GetComponent<Button>().onClick.RemoveAllListeners();
-                    button3.GetComponent<Button>().onClick.RemoveAllListeners();
-                    button4.GetComponent<Button>().onClick.RemoveAllListeners();
                     text.SetText("");
                     person.SetText("");
                     Text = "";
@@ -133,6 +122,7 @@ public class NPC
                 }
                 else
                 {
+                    faceIcon.GetComponent<Image>().sprite = curDialogueBranch.icon;
                     person.SetText(curDialogueBranch.person);
                     if (ichar < curDialogueBranch.textToChars().Count)
                     {
@@ -157,6 +147,7 @@ public class NPC
                         epressed = false;
                         stringEnded = true;
                     }
+                    text.fontSize = curDialogueBranch.fontSize;
                     text.SetText(Text);
                 }
             }

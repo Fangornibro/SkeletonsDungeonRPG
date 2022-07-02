@@ -17,7 +17,8 @@ public class Enemy : MonoBehaviour
     private float timeBtwShots;
     private bool isDamaged;
     private float animationTime = 0.2f;
-    private Collider2D player, shotArea, moveArea;
+    public Collider2D player;
+    private Collider2D shotArea, moveArea;
     private float rightScalexTop, leftScalexTop, rightScalexBottom, leftScalexBottom;
     private SpriteRenderer hpBar;
     private NavMeshAgent navMeshAgent;
@@ -29,7 +30,6 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Collider2D>();
         rightScalexTop = transform.Find("EnemyTop").transform.localScale.x;
         leftScalexTop = transform.Find("EnemyTop").transform.localScale.x * -1;
         rightScalexBottom = transform.Find("EnemyBottom").transform.localScale.x;

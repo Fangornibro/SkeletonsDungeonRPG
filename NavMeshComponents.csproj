@@ -58,14 +58,14 @@
   <ItemGroup>
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshExtension.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshBuilder2d.cs" />
+    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshModifierVolume.cs" />
+    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshSurface2d.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshCollectRootSources2d.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshCacheSources2d.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshCollectSources2d.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshLink.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshBuilderState.cs" />
-    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshModifierVolume.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshSurface.cs" />
-    <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshSurface2d.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshExtensionsProvider.cs" />
     <Compile Include="Assets\NavMeshPlus-master\NavMeshComponents\Scripts\NavMeshModifier.cs" />
   </ItemGroup>

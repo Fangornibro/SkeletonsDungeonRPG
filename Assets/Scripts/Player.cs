@@ -13,8 +13,8 @@ public class Player : MonoBehaviour
     private float timeBtwShots;
     public float startTimeBtwShots;
     public static float HP = 100;
-    public static bool pauseOn = false;
-
+    public static bool canShoot = true;
+    public AudioSource stepsSound;
 
     bool IsDamaged = false;
     float timeBetweenDamage = 0.5f;
@@ -53,9 +53,14 @@ public class Player : MonoBehaviour
             if (moveInput != Vector2.zero)
             {
                 animatorLegs.SetBool("IsRunning", true);
+                if (!stepsSound.isPlaying)
+                {
+                    stepsSound.Play();
+                }
             }
             else
             {
+                stepsSound.Stop();
                 animatorLegs.SetBool("IsRunning", false);
             }
             //Player's body & legs turn (right or left)
@@ -91,22 +96,31 @@ public class Player : MonoBehaviour
             Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
             float rot = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
             //Attacking
-            if (timeBtwShots <= 0)
+            if (ItemEventSystem.canPlayerShoot && NonShotableArea.canPlayerShoot)
             {
-                animatorBody.SetBool("IsAttacking", false);
-                if (Input.GetMouseButton(0) && !Pause.pauseOn)
-                {
-                    Instantiate(bullet, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0f, 0f, rot - 90));
-                    timeBtwShots = startTimeBtwShots;
-                }
+                canShoot = true;
             }
             else
             {
-                animatorBody.SetBool("IsAttacking", true);
-                timeBtwShots -= Time.deltaTime;
+                canShoot = false;
             }
-
-
+            if (canShoot)
+            {
+                if (timeBtwShots <= 0)
+                {
+                    animatorBody.SetBool("IsAttacking", false);
+                    if (Input.GetMouseButton(0))
+                    {
+                        Instantiate(bullet, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0f, 0f, rot - 90));
+                        timeBtwShots = startTimeBtwShots;
+                    }
+                }
+                else
+                {
+                    animatorBody.SetBool("IsAttacking", true);
+                    timeBtwShots -= Time.deltaTime;
+                }
+            }
             //Player death
             if (HP <= 0)
             {

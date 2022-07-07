@@ -6,7 +6,7 @@ public class Icon : MonoBehaviour
 {
     public Item item;
     public Cell cell;
-    public string name, description;
+    public string name, itemType ,description;
     private Transform player;
     private GameObject inventory;
     private void Start()
@@ -29,14 +29,32 @@ public class Icon : MonoBehaviour
 
     public void ChangeItemCell(Cell cellToChange)
     {
-        cellToChange.icon = transform.GetComponent<Icon>().cell.icon;
-        foreach (Cell cellinv in inventory.GetComponent<Inventory>().cells)
+        if (cellToChange.icon == null)
         {
-            if (cellinv == cell)
+            cellToChange.icon = transform.GetComponent<Icon>().cell.icon;
+            foreach (Cell cellinv in inventory.GetComponent<Inventory>().cells)
             {
-                cellinv.icon = null;
+                if (cellinv == cell)
+                {
+                    cellinv.icon = null;
+                    break;
+                }
             }
+            cell = cellToChange;
         }
-        cell = cellToChange;
+        else
+        {
+            Icon temp = cellToChange.icon;
+            cellToChange.icon = transform.GetComponent<Icon>().cell.icon;
+            foreach (Cell cellinv in inventory.GetComponent<Inventory>().cells)
+            {
+                if (cellinv == cell)
+                {
+                    cellinv.icon = temp;
+                    cellinv.icon.cell = cellinv;
+                }
+            }
+            cell = cellToChange;
+        }
     }
 }

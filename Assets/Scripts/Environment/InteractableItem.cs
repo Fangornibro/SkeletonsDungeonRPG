@@ -17,6 +17,7 @@ public class InteractableItem
     public AudioSource textSound = GameObject.Find("textSound").GetComponent<AudioSource>();
     public DialogueBranch dialogue, curDialogueBranch;
     public int Statement = 0;
+    public Inventory invent = GameObject.Find("Inventory").GetComponent<Inventory>();
     public InteractableItem(DialogueBranch Dialogue)
     {
         dialogue = Dialogue;
@@ -31,6 +32,7 @@ public class InteractableItem
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
+            invent.isInventOpen = false;
             if (!stringEnded)
             {
                 if (epressed)

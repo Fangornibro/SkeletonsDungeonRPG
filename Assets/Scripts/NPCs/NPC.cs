@@ -19,6 +19,7 @@ public class NPC
     public AudioSource textSound = GameObject.Find("textSound").GetComponent<AudioSource>();
     public DialogueBranch curDialogueBranch;
     public int plusStatement = 0;
+    public Inventory invent = GameObject.Find("Inventory").GetComponent<Inventory>();
     public NPC(Transform QuestPoint, List<Quest> AllUncompletedQuests)
     {
         questPoint = QuestPoint;     
@@ -53,6 +54,7 @@ public class NPC
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
+                invent.isInventOpen = false;
                 if (!stringEnded)
                 {
                     if (epressed)

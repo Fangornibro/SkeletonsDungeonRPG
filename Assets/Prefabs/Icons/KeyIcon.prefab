@@ -95,6 +95,7 @@ MonoBehaviour:
   item: {fileID: 0}
   cell: {fileID: 0}
   name: Key
+  itemType: Consumable
   description: Looks too gold to open a prison cell.
 --- !u!114 &4535222284307143344
 MonoBehaviour:

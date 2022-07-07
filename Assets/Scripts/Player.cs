@@ -96,7 +96,7 @@ public class Player : MonoBehaviour
             Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
             float rot = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
             //Attacking
-            if (ItemEventSystem.canPlayerShoot && NonShotableArea.canPlayerShoot)
+            if (ItemEventSystem.canPlayerShoot && NonShotableArea.canPlayerShoot && ItemDropButton.canPlayerShoot)
             {
                 canShoot = true;
             }

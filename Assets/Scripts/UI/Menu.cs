@@ -9,7 +9,7 @@ public class Menu : MonoBehaviour
     public bool isMenuOpen = false;
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !invent.GetComponent<Inventory>().isInventOpen && !NPC.isDialogueOpen)
+        if (Input.GetKeyDown(KeyCode.Escape) && !invent.GetComponent<Inventory>().isInventOpen && !NPC.isDialogueOpen && !InteractableItem.isDialogueOpen)
         {
             Pause.pauseOn = !Pause.pauseOn;
             isMenuOpen = !isMenuOpen;

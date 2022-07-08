@@ -23,6 +23,8 @@ public class Inventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I) && !menu.GetComponent<Menu>().isMenuOpen && !NPC.isDialogueOpen || isInventOpen && Input.GetKeyDown(KeyCode.Escape))
         {
             isInventOpen = !isInventOpen;
+            ContextMenu.UnShow();
+            SelectionContextMenu.UnShow();
         }
         //Activation/deactivation of UI when inventory opened
         if (isInventOpen)
@@ -31,11 +33,19 @@ public class Inventory : MonoBehaviour
             {
                 foreach (GameObject UI in InventoryUI)
                 {
-                    UI.SetActive(true);
+                    if (UI.GetComponent<Icon>() != null)
+                    {
+                        if (UI.GetComponent<Icon>().cell.GetComponent<CellType>().cellType != CellType.Type.Usable)
+                        {
+                            UI.SetActive(true);
+                        }
+                    }
+                    else
+                    {
+                        UI.SetActive(true);
+                    }
                 }
             }
-
-            
         }
         else
         {
@@ -43,7 +53,17 @@ public class Inventory : MonoBehaviour
             {
                 foreach (GameObject UI in InventoryUI)
                 {
-                    UI.SetActive(false);
+                    if (UI.GetComponent<Icon>() != null)
+                    {
+                        if (UI.GetComponent<Icon>().cell.GetComponent<CellType>().cellType != CellType.Type.Usable)
+                        {
+                            UI.SetActive(false);
+                        }
+                    }
+                    else
+                    {
+                        UI.SetActive(false);
+                    }
                 }
             }
         }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
+using TMPro;
 
 public class Icon : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class Icon : MonoBehaviour
     public string name, itemType ,description;
     private Transform player;
     private GameObject inventory;
+    public int maxNumber, curNumber;
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -17,12 +20,34 @@ public class Icon : MonoBehaviour
     public void DropItem()
     {
         Instantiate(item, player.position, player.rotation);
-        Destroy(item.gameObject);
-        foreach (Cell cellinv in inventory.GetComponent<Inventory>().cells)
+        curNumber--;
+        transform.Find("Number").GetComponent<TextMeshProUGUI>().SetText(Convert.ToString(curNumber));
+        if (curNumber == 0)
         {
-            if (cellinv == cell)
+            Destroy(item.gameObject);
+            foreach (Cell cellinv in inventory.GetComponent<Inventory>().cells)
             {
-                Destroy(cellinv.icon.gameObject);
+                if (cellinv == cell)
+                {
+                    Destroy(cellinv.icon.gameObject);
+                }
+            }
+        }
+    }
+
+    public void Use()
+    {
+        curNumber--;
+        transform.Find("Number").GetComponent<TextMeshProUGUI>().SetText(Convert.ToString(curNumber));
+        if (curNumber <= 0)
+        {
+            Destroy(item.gameObject);
+            foreach (Cell cellinv in inventory.GetComponent<Inventory>().cells)
+            {
+                if (cellinv == cell)
+                {
+                    Destroy(cellinv.icon.gameObject);
+                }
             }
         }
     }

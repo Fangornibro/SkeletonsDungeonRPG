@@ -113,7 +113,7 @@ public class NPC
                     isDialogueOpen = false;
                     Pause.pauseOn = false;
                     initialization = true;
-                    if (curQuest.statement == 3)
+                    if (curQuest.statement == 3 && plusStatement == 1)
                     {
                         allUncompletedQuests.RemoveAt(0);
                     }

@@ -15,7 +15,7 @@ public class ItemEventSystem : MonoBehaviour, IPointerClickHandler, IPointerDown
         inventory = GameObject.FindGameObjectWithTag("Inventory");
         inventoryHud = inventory.transform.Find("InventoryHud").gameObject.GetComponent<RectTransform>();
         inventoryHudArmor = inventory.transform.Find("InventoryHudArmor").gameObject.GetComponent<RectTransform>();
-        inventoryHudBottom = inventory.transform.Find("InventoryHudBottom").gameObject.GetComponent<RectTransform>();
+        inventoryHudBottom = inventory.transform.Find("VisibleInventory").Find("InventoryHudBottom").gameObject.GetComponent<RectTransform>();
         iconRectTransform = transform.GetComponent<RectTransform>();
     }
     private void Update()
@@ -27,13 +27,23 @@ public class ItemEventSystem : MonoBehaviour, IPointerClickHandler, IPointerDown
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Right)
+        if (inventory.GetComponent<Inventory>().isInventOpen)
         {
-            SelectionContextMenu.Show();
-            DropButtonGO = GameObject.Find("DropButton");
-            DropButtonGO.GetComponent<ItemDropButton>().Icon = transform;
-            UseButtonGO = GameObject.Find("UseButton");
-            UseButtonGO.GetComponent<ItemUseButton>().Icon = transform;
+            if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                SelectionContextMenu.Show();
+                DropButtonGO = GameObject.Find("DropButton");
+                DropButtonGO.GetComponent<ItemDropButton>().Icon = transform;
+                UseButtonGO = GameObject.Find("UseButton");
+                UseButtonGO.GetComponent<ItemUseButton>().Icon = transform;
+            }
+        }
+        else
+        {
+            if (eventData.button == PointerEventData.InputButton.Left && GetComponent<Icon>().cell.GetComponent<CellType>().cellType == CellType.Type.Usable)
+            {
+                GetComponent<Icon>().Use();
+            }
         }
     }
 
@@ -55,8 +65,11 @@ public class ItemEventSystem : MonoBehaviour, IPointerClickHandler, IPointerDown
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        transform.GetComponent<Image>().color = Color.white;
-        ContextMenu.Show(transform.GetComponent<Icon>().name, transform.GetComponent<Icon>().itemType, transform.GetComponent<Icon>().description, transform.position);
+        if (inventory.GetComponent<Inventory>().isInventOpen)
+        {
+            transform.GetComponent<Image>().color = Color.white;
+            ContextMenu.Show(transform.GetComponent<Icon>().name, transform.GetComponent<Icon>().itemType, transform.GetComponent<Icon>().description, transform.position);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)

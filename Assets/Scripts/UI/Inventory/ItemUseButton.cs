@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class ItemUseButton : MonoBehaviour
+public class ItemUseButton : MonoBehaviour, IPointerClickHandler
 {
     private Button button;
     private Image image;
@@ -19,7 +20,6 @@ public class ItemUseButton : MonoBehaviour
         startColor = image.color;
     }
 
-    // Update is called once per frame
     void Update()
     {
         isUsable = Icon.GetComponent<Icon>().item.GetComponent<CellType>().cellType == CellType.Type.Usable;
@@ -32,6 +32,15 @@ public class ItemUseButton : MonoBehaviour
         {
             button.enabled = false;
             image.color = new Color(0.1226415f, 0.1226415f, 0.1226415f, 0.7843137f);
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            Icon.GetComponent<Icon>().Use();
+            SelectionContextMenu.UnShow();
         }
     }
 }

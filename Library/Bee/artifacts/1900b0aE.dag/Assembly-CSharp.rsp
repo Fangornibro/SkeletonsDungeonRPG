@@ -403,6 +403,7 @@
 "Assets/Scripts/Player.cs"
 "Assets/Scripts/UI/Dialogue.cs"
 "Assets/Scripts/UI/HPBar.cs"
+"Assets/Scripts/UI/Inventory/BottomPanel.cs"
 "Assets/Scripts/UI/Inventory/Cell.cs"
 "Assets/Scripts/UI/Inventory/CellType.cs"
 "Assets/Scripts/UI/Inventory/ContextMenu.cs"

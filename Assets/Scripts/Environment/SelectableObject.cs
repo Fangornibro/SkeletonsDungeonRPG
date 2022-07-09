@@ -7,7 +7,7 @@ public class SelectableObject : MonoBehaviour
 {
     [HideInInspector]
     public Collider2D[] allSelectableItems;
-    public static float selectRange;
+    public static float selectRange = 2;
     public LayerMask selectedItemLayerMask;
     public static Collider2D selectedItem, lastSelectedItem;
     public Material selectedMaterial, defaultMaterial;

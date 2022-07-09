@@ -50,16 +50,9 @@ public class SkeletonNPC : MonoBehaviour
             {
                 if (cell.icon != null)
                 {
-                    if (cell.icon.name == "Key")
+                    if (cell.icon.name == "Key" && Skeleton.curQuest.statement == 2)
                     {
-                        if (Skeleton.curQuest.statement == 2)
-                        {
-                            Skeleton.SetStatement(3);
-                        }
-                    }
-                    else
-                    {
-                        Skeleton.SetStatement(2);
+                        Skeleton.SetStatement(3);
                     }
                 }
             }

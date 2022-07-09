@@ -13,7 +13,10 @@ public class ItemDropButton : MonoBehaviour, IPointerClickHandler, IPointerEnter
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            Icon.GetComponent<Icon>().DropItem();
+            if (Icon.GetComponent<Icon>().item.GetComponent<CellType>().cellType != CellType.Type.Quest)
+            {
+                Icon.GetComponent<Icon>().DropOneItem();
+            }
             SelectionContextMenu.UnShow();
         }
     }

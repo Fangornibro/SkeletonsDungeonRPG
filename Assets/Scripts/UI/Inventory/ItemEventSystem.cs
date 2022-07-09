@@ -109,20 +109,22 @@ public class ItemEventSystem : MonoBehaviour, IPointerClickHandler, IPointerDown
                 (iconRectTransform.localPosition.y > inventoryHudArmor.localPosition.y + inventoryHudArmor.rect.height / 2 || iconRectTransform.localPosition.y < inventoryHudArmor.localPosition.y - inventoryHudArmor.rect.height / 2 || iconRectTransform.localPosition.x > inventoryHudArmor.localPosition.x + inventoryHudArmor.rect.width / 2 || iconRectTransform.localPosition.x < inventoryHudArmor.localPosition.x - inventoryHudArmor.rect.width / 2) &&
                 (iconRectTransform.localPosition.y > inventoryHudBottom.localPosition.y + inventoryHudBottom.rect.height / 2 || iconRectTransform.localPosition.y < inventoryHudBottom.localPosition.y - inventoryHudBottom.rect.height / 2 || iconRectTransform.localPosition.x > inventoryHudBottom.localPosition.x + inventoryHudBottom.rect.width / 2 || iconRectTransform.localPosition.x < inventoryHudBottom.localPosition.x - inventoryHudBottom.rect.width / 2))
             {
-                transform.GetComponent<Icon>().DropItem();
+                if (transform.GetComponent<Icon>().item.GetComponent<CellType>().cellType != CellType.Type.Quest)
+                {
+                    transform.GetComponent<Icon>().DropAllItem();
+                }
+                else
+                {
+                    transform.position = transform.GetComponent<Icon>().cell.transform.position;
+                }
             }
             else
             {
                 foreach (Cell cellinv in inventory.GetComponent<Inventory>().cells)
                 {
-                    if (cellinv.GetComponent<Collider2D>().Distance(GetComponent<Collider2D>()).distance < 40 && (cellinv.GetComponent<CellType>().cellType == GetComponent<Icon>().item.GetComponent<CellType>().cellType || cellinv.GetComponent<CellType>().cellType == CellType.Type.Everything))
+                    if (cellinv.GetComponent<Collider2D>().Distance(GetComponent<Collider2D>()).distance < 40)
                     {
-                        if (cellinv.icon != null)
-                        {
-                            cellinv.icon.transform.position = transform.position;
-                        }
                         transform.GetComponent<Icon>().ChangeItemCell(cellinv);
-                        transform.position = transform.GetComponent<Icon>().cell.transform.position;
                         ContextMenu.Show(transform.GetComponent<Icon>().name, transform.GetComponent<Icon>().itemType, transform.GetComponent<Icon>().description, transform.position);
                     }
                     else

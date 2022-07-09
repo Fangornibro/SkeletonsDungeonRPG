@@ -102,6 +102,8 @@ MonoBehaviour:
   iconPrefab: {fileID: 7324666136692259521, guid: 48ad40d06d84c17488cd407e15bc6b6d, type: 3}
   icon: {fileID: 0}
   name: Injector
+  maxNumber: 10
+  curNumber: 1
 --- !u!114 &3184083609400944719
 MonoBehaviour:
   m_ObjectHideFlags: 0

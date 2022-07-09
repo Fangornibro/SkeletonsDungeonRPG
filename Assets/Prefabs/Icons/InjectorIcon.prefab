@@ -94,7 +94,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontSize: 13.4
-  m_fontSizeBase: 36
+  m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 0
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b649657a87ff3847b7576b9a5b02169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
+  item: {fileID: 3184083609400944715, guid: 2efd5aa8386617242a7e6f5c1b3f8974, type: 3}
   cell: {fileID: 0}
   name: Injector
   itemType: Consumable

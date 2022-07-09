@@ -11,6 +11,7 @@ public class Item : MonoBehaviour
     [HideInInspector]
     public GameObject icon;
     public string name;
+    public int maxNumber, curNumber;
 
     private void Start()
     {
@@ -26,10 +27,19 @@ public class Item : MonoBehaviour
                 {
                     if (cell.icon.name == name && cell.icon.curNumber < cell.icon.maxNumber)
                     {
-                        cell.icon.curNumber++;
-                        cell.icon.transform.Find("Number").GetComponent<TextMeshProUGUI>().SetText(Convert.ToString(cell.icon.curNumber));
-                        Destroy(gameObject);
-                        return;
+                        if (cell.icon.curNumber + curNumber <= cell.icon.maxNumber)
+                        {
+                            cell.icon.curNumber += curNumber;
+                            cell.icon.transform.Find("Number").GetComponent<TextMeshProUGUI>().SetText(Convert.ToString(cell.icon.curNumber));
+                            Destroy(gameObject);
+                            return;
+                        }
+                        else
+                        {
+                            curNumber -= cell.icon.maxNumber - cell.icon.curNumber;
+                            cell.icon.curNumber = cell.icon.maxNumber;
+                            cell.icon.transform.Find("Number").GetComponent<TextMeshProUGUI>().SetText(Convert.ToString(cell.icon.curNumber));
+                        }
                     }
                 }
             }
@@ -41,11 +51,13 @@ public class Item : MonoBehaviour
                 icon = Instantiate(iconPrefab);
                 icon.transform.SetParent(inventory.transform);
                 icon.GetComponent<RectTransform>().localPosition = new Vector2(cell.x, cell.y);
-                icon.GetComponent<Icon>().item = this;
                 icon.GetComponent<Icon>().cell = cell;
+                icon.GetComponent<Icon>().maxNumber = maxNumber;
+                icon.GetComponent<Icon>().curNumber = curNumber;
                 inventory.GetComponent<Inventory>().InventoryUI.Add(icon);
                 cell.icon = icon.GetComponent<Icon>();
-                transform.position = new Vector2(-100, 0);
+                cell.icon.transform.Find("Number").GetComponent<TextMeshProUGUI>().SetText(Convert.ToString(cell.icon.curNumber));
+                Destroy (gameObject);
                 break;
             }
         }

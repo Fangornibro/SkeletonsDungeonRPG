@@ -228,10 +228,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b649657a87ff3847b7576b9a5b02169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
+  item: {fileID: 3184083609400944715, guid: 3264e7d5bc5d72043b2ee3a63847ab45, type: 3}
   cell: {fileID: 0}
   name: Key
-  itemType: Quest
+  itemType: Quest item
   description: Looks too gold to open a prison cell.
   maxNumber: 1
   curNumber: 1

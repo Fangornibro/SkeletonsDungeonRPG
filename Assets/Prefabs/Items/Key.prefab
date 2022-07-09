@@ -102,6 +102,8 @@ MonoBehaviour:
   iconPrefab: {fileID: 7324666136692259521, guid: 7ef67db587708a34097b6f87d8fe5c0a, type: 3}
   icon: {fileID: 0}
   name: Key
+  maxNumber: 1
+  curNumber: 1
 --- !u!114 &3184083609400944719
 MonoBehaviour:
   m_ObjectHideFlags: 0

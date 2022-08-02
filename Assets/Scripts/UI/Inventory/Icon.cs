@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class Icon : MonoBehaviour
@@ -13,10 +14,44 @@ public class Icon : MonoBehaviour
     private GameObject inventory;
     [HideInInspector]
     public int maxNumber, curNumber;
+    private bool canHeal = true;
+    private float timeBtwHeal = 5f;
+    private TextMeshProUGUI Timer;
+    private Image TimerShadow;
+    private AudioSource useSound;
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         inventory = GameObject.FindGameObjectWithTag("Inventory");
+        Timer = transform.Find("Timer").GetComponent<TextMeshProUGUI>();
+        TimerShadow = transform.Find("TimerShadow").GetComponent<Image>();
+        useSound = GameObject.Find("injectorSound").GetComponent<AudioSource>();
+    }
+    private void Update()
+    {
+        if (timeBtwHeal != 5)
+        {
+            TimerShadow.gameObject.SetActive(true);
+            TimerShadow.fillAmount = timeBtwHeal/5;
+            Timer.SetText(Convert.ToString(Convert.ToInt32(timeBtwHeal)));
+        }
+        else
+        {
+            TimerShadow.gameObject.SetActive(false);
+            Timer.SetText("");
+        }
+        if (!canHeal)
+        {
+            if (timeBtwHeal <= 0)
+            {
+                timeBtwHeal = 5;
+                canHeal = true;
+            }
+            else
+            {
+                timeBtwHeal -= Time.deltaTime;
+            }
+        }
     }
     public void DropOneItem()
     {
@@ -38,8 +73,19 @@ public class Icon : MonoBehaviour
 
     public void Use()
     {
-        curNumber--;
-        transform.Find("Number").GetComponent<TextMeshProUGUI>().SetText(Convert.ToString(curNumber));
+        if (item.usableType == Item.UsableType.Injector && Player.HP < 100 && canHeal)
+        {
+            curNumber--;
+            transform.Find("Number").GetComponent<TextMeshProUGUI>().SetText(Convert.ToString(curNumber));
+            player.GetComponent<Player>().heal(20);
+            canHeal = false;
+            useSound.gameObject.SetActive(true);
+            useSound.Play();
+            if (Player.HP > 100)
+            {
+                Player.HP = 100;
+            }
+        }
         if (curNumber <= 0)
         {
             Destroy(gameObject);
@@ -69,7 +115,7 @@ public class Icon : MonoBehaviour
         {
             if ((cellToChange.GetComponent<CellType>().cellType == item.GetComponent<CellType>().cellType || cellToChange.GetComponent<CellType>().cellType == CellType.Type.Everything) && (cell.GetComponent<CellType>().cellType == cellToChange.icon.item.GetComponent<CellType>().cellType || cell.GetComponent<CellType>().cellType == CellType.Type.Everything))
             {
-                if (cellToChange.icon.name == name)
+                if (cellToChange.icon.name == name && cellToChange.icon != this)
                 {
                     if (cellToChange.icon.maxNumber > 1 && cellToChange.icon.curNumber != cellToChange.icon.maxNumber)
                     {

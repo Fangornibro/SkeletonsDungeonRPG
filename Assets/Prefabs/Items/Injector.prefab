@@ -104,6 +104,7 @@ MonoBehaviour:
   name: Injector
   maxNumber: 10
   curNumber: 1
+  usableType: 1
 --- !u!114 &3184083609400944719
 MonoBehaviour:
   m_ObjectHideFlags: 0

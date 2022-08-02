@@ -167,4 +167,9 @@ public class Player : MonoBehaviour
             spriteRendererLegs.color = new Color(1, 1, 1, 0.5f);
         }
     }
+
+    public void heal(int plusHP)
+    {
+        HP += plusHP;
+    }
 }

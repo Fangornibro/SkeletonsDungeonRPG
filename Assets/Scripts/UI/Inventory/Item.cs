@@ -12,6 +12,8 @@ public class Item : MonoBehaviour
     public GameObject icon;
     public string name;
     public int maxNumber, curNumber;
+    public enum UsableType { Null, Injector }
+    public UsableType usableType;
 
     private void Start()
     {

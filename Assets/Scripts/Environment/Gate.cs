@@ -21,8 +21,6 @@ public class Gate : MonoBehaviour
     //Start gate
     public static InteractableItem StartGate;
     public DialogueBranch StartGateDialoguebranch1;
-    public TextMeshProUGUI Text, Object;
-    public GameObject dialogueHudFaceIcon, button1, button2, button3, button4;
     public Sprite playetIcon;
     private void Start()
     {

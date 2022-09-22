@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ItemEventSystem : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public GameObject iconPrefab;
-    private GameObject inventory, DropButtonGO, UseButtonGO;
+    private GameObject inventory, DropButtonGO, UseButtonGO, DropAllButtonGO;
     private RectTransform inventoryHud, inventoryHudArmor, inventoryHudBottom, iconRectTransform;
     public static bool canPlayerShoot = true;
     private void Start()
@@ -15,7 +15,7 @@ public class ItemEventSystem : MonoBehaviour, IPointerClickHandler, IPointerDown
         inventory = GameObject.FindGameObjectWithTag("Inventory");
         inventoryHud = inventory.transform.Find("InventoryHud").gameObject.GetComponent<RectTransform>();
         inventoryHudArmor = inventory.transform.Find("InventoryHudArmor").gameObject.GetComponent<RectTransform>();
-        inventoryHudBottom = inventory.transform.Find("VisibleInventory").Find("InventoryHudBottom").gameObject.GetComponent<RectTransform>();
+        inventoryHudBottom = GameObject.Find("InventoryHudBottom").gameObject.GetComponent<RectTransform>();
         iconRectTransform = transform.GetComponent<RectTransform>();
     }
     private void Update()
@@ -31,11 +31,21 @@ public class ItemEventSystem : MonoBehaviour, IPointerClickHandler, IPointerDown
         {
             if (eventData.button == PointerEventData.InputButton.Right)
             {
-                SelectionContextMenu.Show();
+                if (GetComponent<Icon>().curNumber > 1)
+                {
+                    SelectionContextMenu.Show(true);
+                    DropAllButtonGO = GameObject.Find("DropAllButton");
+                    DropAllButtonGO.GetComponent<ItemDropAllButton>().Icon = transform;
+                }
+                else
+                {
+                    SelectionContextMenu.Show(false);
+                }
                 DropButtonGO = GameObject.Find("DropButton");
                 DropButtonGO.GetComponent<ItemDropButton>().Icon = transform;
                 UseButtonGO = GameObject.Find("UseButton");
                 UseButtonGO.GetComponent<ItemUseButton>().Icon = transform;
+
             }
         }
         else
@@ -93,6 +103,7 @@ public class ItemEventSystem : MonoBehaviour, IPointerClickHandler, IPointerDown
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        GetComponent<Icon>().transform.SetParent(GameObject.Find("Canvas").transform);
         if (inventory.GetComponent<Inventory>().isInventOpen)
         {
             ContextMenu.UnShow();
@@ -105,9 +116,9 @@ public class ItemEventSystem : MonoBehaviour, IPointerClickHandler, IPointerDown
         {
             ContextMenu.UnShow();
             canPlayerShoot = true;
-            if ((iconRectTransform.localPosition.y > inventoryHud.localPosition.y + inventoryHud.rect.height / 2 || iconRectTransform.localPosition.y < inventoryHud.localPosition.y - inventoryHud.rect.height / 2 || iconRectTransform.localPosition.x > inventoryHud.localPosition.x + inventoryHud.rect.width / 2 || iconRectTransform.localPosition.x < inventoryHud.localPosition.x - inventoryHud.rect.width / 2) &&
-                (iconRectTransform.localPosition.y > inventoryHudArmor.localPosition.y + inventoryHudArmor.rect.height / 2 || iconRectTransform.localPosition.y < inventoryHudArmor.localPosition.y - inventoryHudArmor.rect.height / 2 || iconRectTransform.localPosition.x > inventoryHudArmor.localPosition.x + inventoryHudArmor.rect.width / 2 || iconRectTransform.localPosition.x < inventoryHudArmor.localPosition.x - inventoryHudArmor.rect.width / 2) &&
-                (iconRectTransform.localPosition.y > inventoryHudBottom.localPosition.y + inventoryHudBottom.rect.height / 2 || iconRectTransform.localPosition.y < inventoryHudBottom.localPosition.y - inventoryHudBottom.rect.height / 2 || iconRectTransform.localPosition.x > inventoryHudBottom.localPosition.x + inventoryHudBottom.rect.width / 2 || iconRectTransform.localPosition.x < inventoryHudBottom.localPosition.x - inventoryHudBottom.rect.width / 2))
+            if ((iconRectTransform.position.y > inventoryHud.position.y + inventoryHud.rect.height / 2 || iconRectTransform.position.y < inventoryHud.position.y - inventoryHud.rect.height / 2 || iconRectTransform.position.x > inventoryHud.position.x + inventoryHud.rect.width / 2 || iconRectTransform.position.x < inventoryHud.position.x - inventoryHud.rect.width / 2) &&
+                (iconRectTransform.position.y > inventoryHudArmor.position.y + inventoryHudArmor.rect.height / 2 || iconRectTransform.position.y < inventoryHudArmor.position.y - inventoryHudArmor.rect.height / 2 || iconRectTransform.position.x > inventoryHudArmor.position.x + inventoryHudArmor.rect.width / 2 || iconRectTransform.position.x < inventoryHudArmor.position.x - inventoryHudArmor.rect.width / 2) &&
+                (iconRectTransform.position.y > inventoryHudBottom.position.y + inventoryHudBottom.rect.height / 2 || iconRectTransform.position.y < inventoryHudBottom.position.y - inventoryHudBottom.rect.height / 2 || iconRectTransform.position.x > inventoryHudBottom.position.x + inventoryHudBottom.rect.width / 2 || iconRectTransform.position.x < inventoryHudBottom.position.x - inventoryHudBottom.rect.width / 2))
             {
                 if (transform.GetComponent<Icon>().item.GetComponent<CellType>().cellType != CellType.Type.Quest)
                 {
@@ -122,7 +133,7 @@ public class ItemEventSystem : MonoBehaviour, IPointerClickHandler, IPointerDown
             {
                 foreach (Cell cellinv in inventory.GetComponent<Inventory>().cells)
                 {
-                    if (cellinv.GetComponent<Collider2D>().Distance(GetComponent<Collider2D>()).distance < 40)
+                    if (cellinv.GetComponent<Collider2D>().Distance(GetComponent<Collider2D>()).distance < cellinv.GetComponent<RectTransform>().sizeDelta.x/4)
                     {
                         transform.GetComponent<Icon>().ChangeItemCell(cellinv);
                         ContextMenu.Show(transform.GetComponent<Icon>().name, transform.GetComponent<Icon>().itemType, transform.GetComponent<Icon>().description, transform.position);

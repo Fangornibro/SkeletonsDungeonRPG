@@ -25,6 +25,13 @@ AnimationClip:
     path: 
     classID: 212
     script: {fileID: 0}
+  - curve:
+    - time: 0
+      value: {fileID: 21300000, guid: f1c884c6e9a62b44185cfea9606fe177, type: 3}
+    attribute: playetIcon
+    path: 
+    classID: 114
+    script: {fileID: 11500000, guid: 3d2e45ad0d55420489a61797c5f3802b, type: 3}
   m_SampleRate: 1
   m_WrapMode: 0
   m_Bounds:
@@ -39,8 +46,16 @@ AnimationClip:
       typeID: 212
       customType: 23
       isPPtrCurve: 1
+    - serializedVersion: 2
+      path: 0
+      attribute: 2058103708
+      script: {fileID: 11500000, guid: 3d2e45ad0d55420489a61797c5f3802b, type: 3}
+      typeID: 114
+      customType: 0
+      isPPtrCurve: 1
     pptrCurveMapping:
     - {fileID: 21300000, guid: 3de54fd65b6045e4dbd22bc5069d9cf1, type: 3}
+    - {fileID: 21300000, guid: f1c884c6e9a62b44185cfea9606fe177, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

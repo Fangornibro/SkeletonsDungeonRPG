@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 
 public class Icon : MonoBehaviour
 {
@@ -23,39 +24,46 @@ public class Icon : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         inventory = GameObject.FindGameObjectWithTag("Inventory");
-        Timer = transform.Find("Timer").GetComponent<TextMeshProUGUI>();
-        TimerShadow = transform.Find("TimerShadow").GetComponent<Image>();
-        useSound = GameObject.Find("injectorSound").GetComponent<AudioSource>();
+        if (item.usableType == Item.UsableType.Injector)
+        {
+            Timer = transform.Find("Timer").GetComponent<TextMeshProUGUI>();
+            TimerShadow = transform.Find("TimerShadow").GetComponent<Image>();
+            useSound = GameObject.Find("injectorSound").GetComponent<AudioSource>();
+        }
     }
     private void Update()
     {
-        if (timeBtwHeal != 5)
+        if(item.usableType == Item.UsableType.Injector)
         {
-            TimerShadow.gameObject.SetActive(true);
-            TimerShadow.fillAmount = timeBtwHeal/5;
-            Timer.SetText(Convert.ToString(Convert.ToInt32(timeBtwHeal)));
-        }
-        else
-        {
-            TimerShadow.gameObject.SetActive(false);
-            Timer.SetText("");
-        }
-        if (!canHeal)
-        {
-            if (timeBtwHeal <= 0)
+            if (timeBtwHeal != 5)
             {
-                timeBtwHeal = 5;
-                canHeal = true;
+                TimerShadow.gameObject.SetActive(true);
+                TimerShadow.fillAmount = timeBtwHeal / 5;
+                Timer.SetText(Convert.ToString(Convert.ToInt32(timeBtwHeal)));
             }
             else
             {
-                timeBtwHeal -= Time.deltaTime;
+                TimerShadow.gameObject.SetActive(false);
+                Timer.SetText("");
+            }
+            if (!canHeal)
+            {
+                if (timeBtwHeal <= 0)
+                {
+                    timeBtwHeal = 5;
+                    canHeal = true;
+                }
+                else
+                {
+                    timeBtwHeal -= Time.deltaTime;
+                }
             }
         }
     }
     public void DropOneItem()
     {
         newItem = Instantiate(item, player.position, player.rotation);
+        newItem.transform.SetParent(player.GetComponent<Player>().curFloor.transform);
         curNumber--;
         transform.Find("Number").GetComponent<TextMeshProUGUI>().SetText(Convert.ToString(curNumber));
         if (curNumber == 0)
@@ -67,6 +75,7 @@ public class Icon : MonoBehaviour
     public void DropAllItem()
     {
         newItem = Instantiate(item, player.position, player.rotation);
+        newItem.transform.SetParent(player.GetComponent<Player>().curFloor.transform);
         newItem.curNumber = curNumber;
         Destroy(gameObject);
     }
@@ -107,7 +116,15 @@ public class Icon : MonoBehaviour
                         break;
                     }
                 }
-                cell = cellToChange;
+                cell = cellToChange; 
+                if (cell.GetComponent<CellType>().cellType == CellType.Type.Usable)
+                {
+                    transform.SetParent(GameObject.Find("VisibleInventory").transform);
+                }
+                else
+                {
+                    transform.SetParent(GameObject.Find("Inventory").transform);
+                }
                 transform.position = transform.GetComponent<Icon>().cell.transform.position;
             }
         }
@@ -132,9 +149,25 @@ public class Icon : MonoBehaviour
                         transform.Find("Number").GetComponent<TextMeshProUGUI>().SetText(Convert.ToString(curNumber));
                         cellToChange.icon.transform.Find("Number").GetComponent<TextMeshProUGUI>().SetText(Convert.ToString(cellToChange.icon.curNumber));
                     }
+                    if (cell.GetComponent<CellType>().cellType == CellType.Type.Usable)
+                    {
+                        transform.SetParent(GameObject.Find("VisibleInventory").transform);
+                    }
+                    else
+                    {
+                        transform.SetParent(GameObject.Find("Inventory").transform);
+                    }
                 }
                 else
                 {
+                    if (cell.GetComponent<CellType>().cellType == CellType.Type.Usable)
+                    {
+                        cellToChange.icon.transform.SetParent(GameObject.Find("VisibleInventory").transform);
+                    }
+                    else
+                    {
+                        cellToChange.icon.transform.SetParent(GameObject.Find("Inventory").transform);
+                    }
                     cellToChange.icon.transform.position = transform.position;
                     Icon temp = cellToChange.icon;
                     cellToChange.icon = transform.GetComponent<Icon>().cell.icon;
@@ -148,6 +181,14 @@ public class Icon : MonoBehaviour
                         }
                     }
                     cell = cellToChange;
+                    if (cell.GetComponent<CellType>().cellType == CellType.Type.Usable)
+                    {
+                        transform.SetParent(GameObject.Find("VisibleInventory").transform);
+                    }
+                    else
+                    {
+                        transform.SetParent(GameObject.Find("Inventory").transform);
+                    }
                     transform.position = transform.GetComponent<Icon>().cell.transform.position;
                 }
             }

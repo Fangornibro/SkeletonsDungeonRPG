@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
     SpriteRenderer spriteRendererHead;
     SpriteRenderer spriteRendererBody;
     SpriteRenderer spriteRendererLegs;
+
+    public GameObject curFloor;
     void Start()
     {
         spriteRendererHead = transform.Find("PlayerHead").GetComponent<SpriteRenderer>();

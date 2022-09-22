@@ -103,5 +103,5 @@ MonoBehaviour:
   damage: 10
   whatIsSolid:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 704
   particleSystem: {fileID: 835498447766092628, guid: a055f418262d05b48973497971557ab3, type: 3}

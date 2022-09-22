@@ -9,8 +9,8 @@ public class Cell : MonoBehaviour
     public Icon icon;
     private void Start()
     {
-        x = GetComponent<RectTransform>().localPosition.x ;
-        y = GetComponent<RectTransform>().localPosition.y;
+        x = GetComponent<RectTransform>().position.x;
+        y = GetComponent<RectTransform>().position.y;
         icon = null;
     }
 }

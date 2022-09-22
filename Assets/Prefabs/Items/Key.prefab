@@ -104,6 +104,7 @@ MonoBehaviour:
   name: Key
   maxNumber: 1
   curNumber: 1
+  usableType: 0
 --- !u!114 &3184083609400944719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38c46bad350d28a41bd60ce664d8fd8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellType: 0
+  cellType: 4
 --- !u!58 &3184083609400944718
 CircleCollider2D:
   m_ObjectHideFlags: 0

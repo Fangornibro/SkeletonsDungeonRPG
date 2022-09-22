@@ -449,7 +449,6 @@ MonoBehaviour:
   description: Injector with suspicious liquid. What can go wrong?
   maxNumber: 10
   curNumber: 1
-  useSound: {fileID: 1194875930898731381, guid: 720f817aa82d9bf43b87b3247bd0a17d, type: 3}
 --- !u!114 &4535222284307143344
 MonoBehaviour:
   m_ObjectHideFlags: 0

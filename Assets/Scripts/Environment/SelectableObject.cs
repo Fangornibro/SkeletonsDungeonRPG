@@ -9,9 +9,9 @@ public class SelectableObject : MonoBehaviour
     public Collider2D[] allSelectableItems;
     public static float selectRange = 2;
     public LayerMask selectedItemLayerMask;
-    public static Collider2D selectedItem, lastSelectedItem;
+    public Collider2D selectedItem, lastSelectedItem;
     public Material selectedMaterial, defaultMaterial;
-    public Transform invent, menu;
+    public Transform menu;
 
     void Update()
     {

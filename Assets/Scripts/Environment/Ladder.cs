@@ -22,8 +22,10 @@ public class Ladder : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
+                player.GetComponent<Player>().curFloor = floorToShow;
                 ladderSound.Play();
                 player.position = tpPoint.position;
+                player.GetComponent<SelectableObject>().lastSelectedItem = null;
                 floorToHide.SetActive(false);
                 floorToShow.SetActive(true);
             }

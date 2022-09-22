@@ -13,7 +13,7 @@ public class SkeletonNPC : MonoBehaviour
     private bool QuestExist = true;
     private GameObject inventory;
     List<Quest> AllUncompletedQuests;
-    private void Start()
+    private void Awake()
     {
         inventory = GameObject.FindGameObjectWithTag("Inventory");
 

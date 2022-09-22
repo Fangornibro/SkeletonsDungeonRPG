@@ -51,8 +51,15 @@ public class Item : MonoBehaviour
             if (cell.icon == null && (cell.GetComponent<CellType>().cellType == GetComponent<CellType>().cellType || cell.GetComponent<CellType>().cellType == CellType.Type.Everything))
             {
                 icon = Instantiate(iconPrefab);
-                icon.transform.SetParent(inventory.transform);
-                icon.GetComponent<RectTransform>().localPosition = new Vector2(cell.x, cell.y);
+                if (cell.GetComponent<CellType>().cellType == CellType.Type.Usable)
+                {
+                    icon.transform.SetParent(GameObject.Find("VisibleInventory").transform);
+                }
+                else
+                {
+                    icon.transform.SetParent(inventory.transform);
+                }
+                icon.GetComponent<RectTransform>().position = new Vector2(cell.x, cell.y);
                 icon.GetComponent<Icon>().cell = cell;
                 icon.GetComponent<Icon>().maxNumber = maxNumber;
                 icon.GetComponent<Icon>().curNumber = curNumber;
